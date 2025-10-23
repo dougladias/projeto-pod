@@ -11,6 +11,9 @@ import { request } from '@/routes/password';
 import { Form, Head } from '@inertiajs/react';
 import { useState, useRef } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
+import cenarioLogin from '@/assets/cenarioLogin.svg';
+import LogoQuiz from '@/assets/LogoQuiz.svg';
+import avatarM from '@/assets/avatarM.svg';
 
 interface LoginProps {
     status?: string;
@@ -24,7 +27,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     const handleImageLoad = () => {
         loadedCountRef.current += 1;
-        if (loadedCountRef.current === 3) { 
+        if (loadedCountRef.current === 3) {
             setImagesLoaded(true);
         }
     };
@@ -33,9 +36,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
                 <div className="hidden">
-                    <img src="/assets/cenarioLogin.svg" onLoad={handleImageLoad} alt="" />
-                    <img src="/assets/LogoQuiz.svg" onLoad={handleImageLoad} alt="" />
-                    <img src="/assets/avatarM.svg" onLoad={handleImageLoad} alt="" />
+                    <img src={cenarioLogin} onLoad={handleImageLoad} alt="" />
+                    <img src={LogoQuiz} onLoad={handleImageLoad} alt="" />
+                    <img src={avatarM} onLoad={handleImageLoad} alt="" />
                 </div>
             </div>
         );
@@ -51,7 +54,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     {/* Cenário de fundo */}
                     <div className="absolute inset-0 flex items-center justify-center">
                         <img
-                            src="/assets/cenarioLogin.svg"
+                            src={cenarioLogin}
                             alt="Cenário Quiz Missão"
                             className="min-h-full w-auto object-cover"
                             loading="eager"
@@ -65,7 +68,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     {/* Logo no topo esquerdo */}
                     <div className="absolute top-60 left-1/2 -translate-x-1/3 z-10">
                         <img
-                            src="/assets/LogoQuiz.svg"
+                            src={LogoQuiz}
                             alt="Quiz Missão Caça Vape"
                             className="w-125 h-auto drop-shadow-[0_2px_4px_rgba(0,0,0,1)]"
                             loading="eager"
@@ -76,7 +79,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     {/* Personagem no canto inferior esquerdo */}
                     <div className="absolute bottom-0 left-0 z-10">
                         <img
-                            src="/assets/avatarM.svg"
+                            src={avatarM}
                             alt="Personagem"
                             className="h-200 w-auto"
                             loading="eager"
@@ -90,7 +93,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         {/* Logo no topo */}
                         <div className="text-center mb-10">
                             <img
-                                src="/assets/LogoQuiz.svg"
+                                src={LogoQuiz}
                                 alt="Quiz Missão"
                                 className="w-50 h-auto mx-auto mb-4 drop-shadow-[0_2px_4px_rgba(0,0,0,1)]" />
                             <h2 className="text-4xl font-luckiest text-white">Bem vindo!</h2>
