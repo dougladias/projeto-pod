@@ -21,16 +21,13 @@ import {
 // Import avatar images
 import NikoAvatar from '@/assets/Niko.svg';
 import TinaAvatar from '@/assets/Tina.svg';
+import LogoQuiz from '@/assets/LogoQuiz.svg';
 
-// Available avatars (male and female)
-const AVATARS = {
-    male: [
-        { id: 'niko', src: NikoAvatar, alt: 'Niko' },
-    ],
-    female: [
-        { id: 'tina', src: TinaAvatar, alt: 'Tina' },
-    ],
-};
+// Available avatars
+const AVATARS = [
+    { id: 'niko', src: NikoAvatar, alt: 'Niko' },
+    { id: 'tina', src: TinaAvatar, alt: 'Tina' },
+];
 
 export default function Register() {
     const [selectedAvatar, setSelectedAvatar] = useState<string>('');
@@ -43,14 +40,10 @@ export default function Register() {
 
     const handleImageLoad = () => {
         loadedCountRef.current += 1;
-        if (loadedCountRef.current === 2) {
+        if (loadedCountRef.current === 3) {
             setImagesLoaded(true);
         }
     };
-
-    const availableAvatars = selectedGender
-        ? AVATARS[selectedGender as keyof typeof AVATARS]
-        : [];
 
     if (!imagesLoaded) {
         return (
@@ -58,6 +51,7 @@ export default function Register() {
                 <div className="hidden">
                     <img src={NikoAvatar} onLoad={handleImageLoad} alt="" />
                     <img src={TinaAvatar} onLoad={handleImageLoad} alt="" />
+                    <img src={LogoQuiz} onLoad={handleImageLoad} alt="" />
                 </div>
             </div>
         );
@@ -69,14 +63,20 @@ export default function Register() {
 
             {/* Left Side - Logo */}
             <div className="hidden w-1/2 items-center justify-center bg-primary lg:flex">
-                <div className="text-center">
-                    <h1 className="font-luckiest text-6xl text-white">
-                        QUIZ
-                        <br />
-                        MISSÃO
-                        <br />
-                        <span className="text-yellow-400">CAÇA VAPE</span>
-                    </h1>
+                <div className="text-center space-y-8">
+                    <img
+                        src={LogoQuiz}
+                        alt="Quiz Missão Caça Vape"
+                        className="w-auto h-auto max-w-md drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
+                    />
+
+                    {/* Login Link */}
+                    <div className="text-white text-lg">
+                        Já tem uma conta?{' '}
+                        <TextLink href={login()} className="text-yellow-400 hover:text-yellow-300 no-underline font-semibold">
+                            Fazer login
+                        </TextLink>
+                    </div>
                 </div>
             </div>
 
@@ -218,10 +218,7 @@ export default function Register() {
                                         <Select
                                             required
                                             value={selectedGender}
-                                            onValueChange={(value) => {
-                                                setSelectedGender(value);
-                                                setSelectedAvatar('');
-                                            }}
+                                            onValueChange={setSelectedGender}
                                         >
                                             <SelectTrigger className="bg-[#1a1a1a] border-gray-800 text-white h-9 text-sm rounded-md">
                                                 <SelectValue placeholder="Selecione" />
@@ -326,46 +323,40 @@ export default function Register() {
                                 </div>
 
                                 {/* Avatar Selection */}
-                                {selectedGender && (
-                                    <div className="space-y-3 py-4">
-                                        <Label className="text-white text-base font-normal block text-center">Escolha seu avatar</Label>
-                                        <div className="flex justify-center items-center gap-6 min-h-[100px]">
-                                            {availableAvatars.length > 0 ? (
-                                                availableAvatars.map((avatar) => (
-                                                    <button
-                                                        key={avatar.id}
-                                                        type="button"
-                                                        onClick={() =>
-                                                            setSelectedAvatar(
-                                                                avatar.id,
-                                                            )
-                                                        }
-                                                        className={`rounded-full border-4 p-1 transition-all ${
-                                                            selectedAvatar ===
-                                                            avatar.id
-                                                                ? 'scale-110 border-blue-600'
-                                                                : 'border-gray-600 opacity-70 hover:opacity-100'
-                                                        }`}
-                                                    >
-                                                        <img
-                                                            src={avatar.src}
-                                                            alt={avatar.alt}
-                                                            className="h-24 w-24 rounded-full object-cover bg-white"
-                                                        />
-                                                    </button>
-                                                ))
-                                            ) : (
-                                                <p className="text-gray-400 text-sm">Nenhum avatar disponível</p>
-                                            )}
-                                        </div>
-                                        <input
-                                            type="hidden"
-                                            name="avatar"
-                                            value={selectedAvatar}
-                                        />
-                                        <InputError message={errors.avatar} />
+                                <div className="space-y-3 py-4">
+                                    <Label className="text-white text-base font-normal block">Escolha seu avatar</Label>
+                                    <div className="flex justify-start items-center gap-4 min-h-[80px]">
+                                        {AVATARS.map((avatar) => (
+                                            <button
+                                                key={avatar.id}
+                                                type="button"
+                                                onClick={() =>
+                                                    setSelectedAvatar(
+                                                        avatar.id,
+                                                    )
+                                                }
+                                                className={`border-4 p-1 transition-all rounded-full cursor-pointer ${
+                                                    selectedAvatar ===
+                                                    avatar.id
+                                                        ? 'scale-110 border-blue-600 bg-blue-600/10'
+                                                        : 'border-gray-600 opacity-70 hover:opacity-100 hover:border-blue-400'
+                                                }`}
+                                            >
+                                                <img
+                                                    src={avatar.src}
+                                                    alt={avatar.alt}
+                                                    className="h-16 w-auto"
+                                                />
+                                            </button>
+                                        ))}
                                     </div>
-                                )}
+                                    <input
+                                        type="hidden"
+                                        name="avatar"
+                                        value={selectedAvatar}
+                                    />
+                                    <InputError message={errors.avatar} />
+                                </div>
 
                                 {/* Terms and Conditions */}
                                 <div className="space-y-1">
@@ -377,7 +368,7 @@ export default function Register() {
                                                 setAcceptedTerms(checked as boolean)
                                             }
                                             required
-                                            className="border-gray-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 h-3.5 w-3.5"
+                                            className="border-gray-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 h-3.5 w-3.5 cursor-pointer"
                                         />
                                         <input
                                             type="hidden"
@@ -386,7 +377,7 @@ export default function Register() {
                                         />
                                         <label
                                             htmlFor="terms"
-                                            className="text-xs text-gray-400 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                            className="text-xs text-gray-400 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
                                         >
                                             Li e concordo com os{' '}
                                             <TextLink href="/termos" target="_blank" className="text-blue-400 hover:text-blue-300 no-underline">
@@ -406,14 +397,6 @@ export default function Register() {
                                     {processing && <Spinner />}
                                     Cadastrar
                                 </Button>
-
-                                {/* Login Link */}
-                                <div className="text-center text-xs text-gray-400 pt-3">
-                                    Já tem uma conta?{' '}
-                                    <TextLink href={login()} className="text-blue-400 hover:text-blue-300 no-underline">
-                                        Fazer login
-                                    </TextLink>
-                                </div>
                             </>
                         )}
                     </Form>
