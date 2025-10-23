@@ -31,13 +31,29 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'school' => 'required|string|max:255',
+            'birth_date' => 'required|date|before:today',
+            'cpf' => 'required|string|size:14|unique:users,cpf',
+            'school_year' => 'required|string|in:6,7,8,9,1,2,3',
+            'gender' => 'required|in:male,female',
+            'language' => 'required|string|in:pt-BR,en-US,es-ES',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => 'required|string|max:15',
+            'avatar' => 'nullable|string',
+            'password' => ['required', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
             'name' => $request->name,
+            'school' => $request->school,
+            'birth_date' => $request->birth_date,
+            'cpf' => $request->cpf,
+            'school_year' => $request->school_year,
+            'gender' => $request->gender,
+            'language' => $request->language,
             'email' => $request->email,
+            'phone' => $request->phone,
+            'avatar' => $request->avatar,
             'password' => $request->password,
         ]);
 

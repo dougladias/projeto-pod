@@ -20,6 +20,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'school',
+        'birth_date',
+        'cpf',
+        'school_year',
+        'gender',
+        'language',
+        'phone',
+        'avatar',
     ];
 
     /**
@@ -41,6 +49,7 @@ class User extends Authenticatable
     {
         return [
             'password' => 'hashed',
+            'birth_date' => 'date',
         ];
     }
 }
