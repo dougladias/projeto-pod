@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
+import InputError from '@/components/common/input-error';
 
 interface FormFieldProps {
     id: string;

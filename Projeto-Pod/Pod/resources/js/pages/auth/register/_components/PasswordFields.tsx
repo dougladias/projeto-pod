@@ -1,6 +1,6 @@
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
-import { PasswordInput } from '@/components/password-input';
+import InputError from '@/components/common/input-error';
+import { PasswordInput } from '@/components/common/password-input';
 
 interface PasswordFieldsProps {
     passwordValue: string;

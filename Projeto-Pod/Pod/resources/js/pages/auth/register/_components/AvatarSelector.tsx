@@ -1,5 +1,5 @@
 import { Label } from '@/components/ui/label';
-import InputError from '@/components/input-error';
+import InputError from '@/components/common/input-error';
 import NikoAvatar from '@/assets/Niko.svg';
 import TinaAvatar from '@/assets/Tina.svg';
 

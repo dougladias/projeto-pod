@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { router } from '@inertiajs/react';
-import '../../css/loading.css';
+import '../../../css/loading.css';
 import LogoQuiz from '@/assets/LogoQuiz.svg';
 
 // Lista de rotas onde o loading NÃO deve aparecer

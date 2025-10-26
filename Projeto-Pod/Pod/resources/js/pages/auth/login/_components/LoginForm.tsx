@@ -1,7 +1,7 @@
 'use client';
 
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
+import InputError from '@/components/common/input-error';
+import TextLink from '@/components/common/text-link';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,7 @@ import { loginSchema } from '@/lib/validations/auth/login';
 import type { ZodIssue } from 'zod';
 import { PasswordField } from './PasswordField';
 import { LoginHeader } from './LoginHeader';
-import { formatCPF } from '@/lib/masks';
+import { formatCPF } from '@/lib/masks/masks';
 import { toast } from 'sonner';
 
 interface LoginFormProps {

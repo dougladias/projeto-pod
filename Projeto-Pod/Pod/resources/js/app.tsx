@@ -5,7 +5,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import { initializeTheme } from './hooks/use-appearance';
 import { Toaster } from '@/components/ui/sonner';
-import { GlobalLoading } from '@/components/global-loading';
+import { GlobalLoading } from '@/components/loading/global-loading';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

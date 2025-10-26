@@ -1,21 +1,17 @@
-import { Head } from '@inertiajs/react';
-import AppearanceTabs from '@/components/appearance-tabs';
-import HeadingSmall from '@/components/heading-small';
-import { type BreadcrumbItem } from '@/types';
-import AppLayout from '@/layouts/app-layout';
+import { Head, usePage } from '@inertiajs/react';
+import AppearanceTabs from '@/components/settings/appearance-tabs';
+import HeadingSmall from '@/components/common/heading-small';
+import { type SharedData } from '@/types';
+import StudentLayout from '@/layouts/student/student-layout';
+import AdminLayout from '@/layouts/admin/admin-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { edit as editAppearance } from '@/routes/appearance';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Appearance settings',
-        href: editAppearance().url,
-    },
-];
 
 export default function Appearance() {
+    const { auth } = usePage<SharedData>().props;
+    const Layout = auth.user.role === 'admin' ? AdminLayout : StudentLayout;
+
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <Layout>
             <Head title="Appearance settings" />
 
             <SettingsLayout>
@@ -27,6 +23,6 @@ export default function Appearance() {
                     <AppearanceTabs />
                 </div>
             </SettingsLayout>
-        </AppLayout>
+        </Layout>
     );
 }

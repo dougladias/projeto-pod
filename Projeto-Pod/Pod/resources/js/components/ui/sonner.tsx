@@ -25,10 +25,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
           description: "!text-gray-400",
           actionButton: "!bg-blue-600 !text-white",
           cancelButton: "!bg-gray-800 !text-gray-400",
-          error: "!border-red-600 !bg-red-950/50",
-          success: "!border-green-600 !bg-green-950/50",
-          warning: "!border-yellow-600 !bg-yellow-950/50",
-          info: "!border-blue-600 !bg-blue-950/50",
+          error: "!border-red-600 !bg-red-950",
+          success: "!border-green-600 !bg-green-950",
+          warning: "!border-yellow-600 !bg-yellow-950",
+          info: "!border-blue-600 !bg-blue-950",
         },
       }}
       {...props}

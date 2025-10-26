@@ -1,6 +1,6 @@
 import { Checkbox } from '@/components/ui/checkbox';
-import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
+import InputError from '@/components/common/input-error';
+import TextLink from '@/components/common/text-link';
 
 interface TermsCheckboxProps {
     checked: boolean;

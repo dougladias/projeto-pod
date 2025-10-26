@@ -1,30 +1,25 @@
 import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
-import InputError from '@/components/input-error';
-import AppLayout from '@/layouts/app-layout';
+import InputError from '@/components/common/input-error';
+import StudentLayout from '@/layouts/student/student-layout';
+import AdminLayout from '@/layouts/admin/admin-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { type BreadcrumbItem } from '@/types';
+import { type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, usePage } from '@inertiajs/react';
 import { useRef } from 'react';
-import HeadingSmall from '@/components/heading-small';
+import HeadingSmall from '@/components/common/heading-small';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/password';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Password settings',
-        href: edit().url,
-    },
-];
 
 export default function Password() {
+    const { auth } = usePage<SharedData>().props;
+    const Layout = auth.user.role === 'admin' ? AdminLayout : StudentLayout;
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <Layout>
             <Head title="Password settings" />
 
             <SettingsLayout>
@@ -140,6 +135,6 @@ export default function Password() {
                     </Form>
                 </div>
             </SettingsLayout>
-        </AppLayout>
+        </Layout>
     );
 }

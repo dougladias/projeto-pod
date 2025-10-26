@@ -1,29 +1,23 @@
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-import { type BreadcrumbItem, type SharedData } from '@/types';
+import { type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Form, Head, usePage } from '@inertiajs/react';
-import DeleteUser from '@/components/delete-user';
-import HeadingSmall from '@/components/heading-small';
-import InputError from '@/components/input-error';
+import DeleteUser from '@/components/settings/delete-user';
+import HeadingSmall from '@/components/common/heading-small';
+import InputError from '@/components/common/input-error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AppLayout from '@/layouts/app-layout';
+import StudentLayout from '@/layouts/student/student-layout';
+import AdminLayout from '@/layouts/admin/admin-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { edit } from '@/routes/profile';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Profile settings',
-        href: edit().url,
-    },
-];
 
 export default function Profile() {
     const { auth } = usePage<SharedData>().props;
+    const Layout = auth.user.role === 'admin' ? AdminLayout : StudentLayout;
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <Layout>
             <Head title="Profile settings" />
 
             <SettingsLayout>
@@ -108,6 +102,6 @@ export default function Profile() {
 
                 <DeleteUser />
             </SettingsLayout>
-        </AppLayout>
+        </Layout>
     );
 }

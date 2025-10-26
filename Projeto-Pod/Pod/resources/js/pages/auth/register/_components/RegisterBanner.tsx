@@ -1,5 +1,5 @@
 import LogoQuiz from '@/assets/LogoQuiz.svg';
-import TextLink from '@/components/text-link';
+import TextLink from '@/components/common/text-link';
 import { login } from '@/routes';
 
 export function RegisterBanner() {
