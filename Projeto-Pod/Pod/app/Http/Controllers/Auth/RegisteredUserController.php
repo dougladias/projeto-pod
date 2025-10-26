@@ -35,12 +35,12 @@ class RegisteredUserController extends Controller
             'birth_date' => 'required|date|before:today',
             'cpf' => 'required|string|size:14|unique:users,cpf',
             'school_year' => 'required|string|in:6,7,8,9,1,2,3',
-            'gender' => 'required|in:male,female',
+            'gender' => 'required|in:male,female,other',
             'language' => 'required|string|in:pt-BR,en-US,es-ES',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'phone' => 'required|string|max:15',
             'avatar' => 'nullable|string',
-            'password' => ['required', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
@@ -55,14 +55,12 @@ class RegisteredUserController extends Controller
             'phone' => $request->phone,
             'avatar' => $request->avatar,
             'password' => $request->password,
+            'role' => 'aluno', // Sempre define como aluno no registro
         ]);
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        $request->session()->regenerate();
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Redireciona para o login ao invés de logar automaticamente
+        return redirect()->route('login')->with('status', 'Cadastro realizado com sucesso! Faça login para continuar.');
     }
 }

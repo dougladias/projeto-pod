@@ -27,7 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'], // O campo se chama 'email' no frontend, mas é o CPF
             'password' => ['required', 'string'],
         ];
     }
@@ -41,14 +41,15 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        /** @var User|null $user */
-        $user = Auth::getProvider()->retrieveByCredentials($this->only('email', 'password'));
+        // Busca o usuário pelo CPF (o campo 'email' contém o CPF formatado)
+        $cpf = $this->input('email'); // CPF já vem formatado do frontend (000.000.000-00)
+        $user = User::where('cpf', $cpf)->first();
 
         if (! $user || ! Auth::getProvider()->validateCredentials($user, $this->only('password'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
-                'email' => __('auth.failed'),
+                'email' => 'CPF ou senha incorretos.',
             ]);
         }
 
@@ -73,10 +74,7 @@ class LoginRequest extends FormRequest
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => __('auth.throttle', [
-                'seconds' => $seconds,
-                'minutes' => ceil($seconds / 60),
-            ]),
+            'email' => 'Muitas tentativas de login. Tente novamente em ' . ceil($seconds / 60) . ' minutos.',
         ]);
     }
 

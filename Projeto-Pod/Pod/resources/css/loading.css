@@ -1,0 +1,55 @@
+/* Animações exclusivas do GlobalLoading */
+
+@keyframes spin-reverse {
+    from {
+        transform: rotate(360deg);
+    }
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes pulse-scale {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+@keyframes bounce-dot {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes progress-bar {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.animate-spin-reverse {
+    animation: spin-reverse 1.5s linear infinite;
+}
+
+.animate-pulse-scale {
+    animation: pulse-scale 2s ease-in-out infinite;
+}
+
+.animate-bounce-dot {
+    animation: bounce-dot 1s ease-in-out infinite;
+}
+
+.animate-progress-bar {
+    animation: progress-bar 1.5s ease-in-out infinite;
+}

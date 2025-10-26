@@ -6,13 +6,12 @@ import { z } from 'zod';
 export const loginSchema = z.object({
     email: z
         .string()
-        .min(1, 'CPF é obrigatório'),
+        .min(1, 'CPF é obrigatório')
+        .max(14, 'CPF inválido'),
     password: z
         .string()
-        .min(1, 'Senha é obrigatória'),        
-    user_type: z.enum(['aluno', 'administrador'], {
-        message: 'Selecione o tipo de usuário',
-    }),
+        .min(1, 'Senha é obrigatória')
+        .max(50, 'Senha muito longa'),
     remember: z.boolean().optional(),
 });
 

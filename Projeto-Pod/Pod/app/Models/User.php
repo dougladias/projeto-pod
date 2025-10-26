@@ -28,6 +28,7 @@ class User extends Authenticatable
         'language',
         'phone',
         'avatar',
+        'role',
     ];
 
     /**

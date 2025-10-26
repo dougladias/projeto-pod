@@ -16,6 +16,8 @@ import { loginSchema } from '@/lib/validations/auth/login';
 import type { ZodIssue } from 'zod';
 import { PasswordField } from './PasswordField';
 import { LoginHeader } from './LoginHeader';
+import { formatCPF } from '@/lib/masks';
+import { toast } from 'sonner';
 
 interface LoginFormProps {
     status?: string;
@@ -26,18 +28,6 @@ export function LoginForm({ status, canResetPassword }: LoginFormProps) {
     const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
     const [processing, setProcessing] = useState(false);
     const [cpfValue, setCpfValue] = useState('');
-
-    const formatCPF = (value: string) => {
-        // Remove tudo que não é número
-        const numbers = value.replace(/\D/g, '');
-
-        // Aplica a máscara: 000.000.000-00
-        return numbers
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d)/, '$1.$2')
-            .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-            .replace(/(-\d{2})\d+?$/, '$1');
-    };
 
     const handleCPFChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = formatCPF(e.target.value);
@@ -52,7 +42,6 @@ export function LoginForm({ status, canResetPassword }: LoginFormProps) {
         const data = {
             email: formData.get('email') as string,
             password: formData.get('password') as string,
-            user_type: formData.get('user_type') as string,
             remember: formData.get('remember') === 'on',
         };
 
@@ -74,6 +63,21 @@ export function LoginForm({ status, canResetPassword }: LoginFormProps) {
         setProcessing(true);
         router.post(login.url(), result.data, {
             onFinish: () => setProcessing(false),
+            onSuccess: () => {
+                // Mostra toast de sucesso
+                toast.success('Login realizado com sucesso!', {
+                    description: 'Redirecionando...',
+                });
+            },
+            onError: (errors) => {
+                // Não mostra erros inline, apenas toast
+                // Mostra toast de erro
+                if (errors.email) {
+                    toast.error('Erro ao fazer login', {
+                        description: errors.email as string,
+                    });
+                }
+            },
             preserveScroll: true,
         });
     };
@@ -143,31 +147,10 @@ export function LoginForm({ status, canResetPassword }: LoginFormProps) {
                         )}
                     </div>
 
-                    {/* Campo Tipo de Usuário */}
-                    <div className="space-y-1">
-                        <Label htmlFor="user-type" className="text-gray-400 text-xs font-normal">
-                            Tipo de Usuário
-                        </Label>
-                        <Select name="user_type" defaultValue="aluno">
-                            <SelectTrigger className="bg-[#1a1a1a] border-gray-800 text-white h-9 text-sm rounded-md">
-                                <SelectValue placeholder="Selecione o tipo" />
-                            </SelectTrigger>
-                            <SelectContent className="bg-[#1a1a1a] border-gray-800">
-                                <SelectItem value="aluno" className="text-white hover:bg-gray-800 cursor-pointer">
-                                    Aluno
-                                </SelectItem>
-                                <SelectItem value="administrador" className="text-white hover:bg-gray-800 cursor-pointer">
-                                    Administrador
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                        <InputError message={validationErrors.user_type} />
-                    </div>
-
                     {/* Botão Entrar */}
                     <Button
                         type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors h-12 text-base mt-5 cursor-pointer"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors h-9 text-sm mt-5 cursor-pointer"
                         tabIndex={4}
                         disabled={processing}
                     >

@@ -18,9 +18,18 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(
             ['email' => 'admin@dev.com'],
             [
-                'name' => 'ADMIN',
+                'name' => 'Administrador do Sistema',
                 'password' => 'admin123',
+                'school' => 'Sistema',
+                'birth_date' => '1990-01-01',
+                'cpf' => '123.456.789-00',
+                'school_year' => null,
+                'gender' => 'other',
+                'language' => 'pt-BR',
+                'phone' => '(11) 98765-4321',
+                'avatar' => null,
+                'role' => 'admin',
             ]
-        );
+        );    
     }
 }
