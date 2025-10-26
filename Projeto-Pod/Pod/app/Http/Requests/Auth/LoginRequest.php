@@ -27,8 +27,26 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string'], // O campo se chama 'email' no frontend, mas é o CPF
-            'password' => ['required', 'string'],
+            'email' => ['required', 'string', 'size:14', 'regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/'], // CPF formatado
+            'password' => ['required', 'string', 'min:6', 'max:50'],
+            'remember' => ['sometimes', 'boolean'],
+        ];
+    }
+
+    /**
+     * Get custom validation messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.required' => 'O CPF é obrigatório.',
+            'email.size' => 'O CPF deve ter 14 caracteres.',
+            'email.regex' => 'O CPF deve estar no formato: 000.000.000-00',
+            'password.required' => 'A senha é obrigatória.',
+            'password.min' => 'A senha deve ter no mínimo 6 caracteres.',
+            'password.max' => 'A senha é muito longa.',
         ];
     }
 

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,22 +26,8 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'school' => 'required|string|max:255',
-            'birth_date' => 'required|date|before:today',
-            'cpf' => 'required|string|size:14|unique:users,cpf',
-            'school_year' => 'required|string|in:6,7,8,9,1,2,3',
-            'gender' => 'required|in:male,female,other',
-            'language' => 'required|string|in:pt-BR,en-US,es-ES',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'phone' => 'required|string|max:15',
-            'avatar' => 'nullable|string',
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
         $user = User::create([
             'name' => $request->name,
             'school' => $request->school,
@@ -60,7 +45,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        // Redireciona para o login ao invés de logar automaticamente
-        return redirect()->route('login')->with('status', 'Cadastro realizado com sucesso! Faça login para continuar.');
+        // Retorna sucesso sem redirecionar (o frontend mostra o modal)
+        return back()->with('success', 'Cadastro realizado com sucesso!');
     }
 }

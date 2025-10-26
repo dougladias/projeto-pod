@@ -6,7 +6,7 @@ import { z } from 'zod';
 export const loginSchema = z.object({
     email: z
         .string()
-        .min(1, 'CPF é obrigatório')
+        .min(1, 'CPF é obrigatório')        
         .max(14, 'CPF inválido'),
     password: z
         .string()
