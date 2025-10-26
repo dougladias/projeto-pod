@@ -1,6 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { PropsWithChildren, useState } from 'react';
-import { LayoutDashboard, Users, FileQuestion, BarChart3, Settings, Shield, TrendingUp, FolderKanban, LogOut, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Users, FileQuestion, BarChart3, Shield, TrendingUp, FolderKanban, LogOut, Menu, X } from 'lucide-react';
 
 export default function AdminLayout({ children }: PropsWithChildren) {
     const { url } = usePage();
@@ -12,8 +12,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         { name: 'Usuário', icon: Users, href: '/backoffice/users' },
         { name: 'Ranking', icon: TrendingUp, href: '/backoffice/ranking' },
         { name: 'Estatísticas', icon: BarChart3, href: '/backoffice/statistics' },
-        { name: 'Cadastros', icon: FolderKanban, href: '/backoffice/registrations' },
-        { name: 'Configurações', icon: Settings, href: '/backoffice/settings' },
+        { name: 'Cadastros', icon: FolderKanban, href: '/backoffice/registrations' },        
     ];
 
     const handleLogout = () => {

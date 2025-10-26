@@ -36,7 +36,7 @@ export default function StudentLayout({ children }: PropsWithChildren) {
     const menuItems = [
         { name: 'Dashboard', icon: BookOpen, href: '/app/dashboard' },
         { name: 'Meu Perfil', icon: User, href: '/app/profile' },
-        { name: 'Ranking', icon: Trophy, href: '/app/ranking' },
+        { name: 'Rankings', icon: Trophy, href: '/app/ranking' },
         { name: 'Progresso', icon: TrendingUp, href: '/app/progress' },
         { name: 'Quizzes', icon: BookOpen, href: '/app/quiz' },
     ];
