@@ -26,4 +26,33 @@ export default defineConfig({
     esbuild: {
         jsx: 'automatic',
     },
+    build: {
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    // Separa React em um chunk próprio
+                    'react-vendor': ['react', 'react-dom'],
+                    // Separa componentes UI pesados
+                    'ui-vendor': [
+                        '@radix-ui/react-dialog',
+                        '@radix-ui/react-progress',
+                        '@radix-ui/react-select',
+                        '@radix-ui/react-dropdown-menu',
+                    ],
+                    // Separa Inertia
+                    'inertia': ['@inertiajs/react'],
+                    // Separa ícones
+                    'icons': ['lucide-react'],
+                },
+            },
+        },
+        // Otimiza chunks
+        chunkSizeWarningLimit: 1000,
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true, // Remove console.logs em produção
+            },
+        },
+    },
 });

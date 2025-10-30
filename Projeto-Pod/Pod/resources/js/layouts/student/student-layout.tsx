@@ -1,6 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { PropsWithChildren, useState } from 'react';
-import { BookOpen, User, Trophy, TrendingUp, Menu, X, LogOut } from 'lucide-react';
+import { BookOpen, User, Menu, X, LogOut, Play } from 'lucide-react';
 
 // Import avatars
 import NikoAvatar from '@/assets/Niko.svg';
@@ -35,10 +35,8 @@ export default function StudentLayout({ children }: PropsWithChildren) {
 
     const menuItems = [
         { name: 'Dashboard', icon: BookOpen, href: '/app/dashboard' },
-        { name: 'Meu Perfil', icon: User, href: '/app/profile' },
-        { name: 'Rankings', icon: Trophy, href: '/app/ranking' },
-        { name: 'Progresso', icon: TrendingUp, href: '/app/progress' },
-        { name: 'Quizzes', icon: BookOpen, href: '/app/quiz' },
+        { name: 'Jogar Quiz', icon: Play, href: '/app/playQuiz' },        
+        { name: 'Meus Quizzes', icon: BookOpen, href: '/app/myQuiz' },
     ];
 
     const handleLogout = () => {
@@ -55,7 +53,7 @@ export default function StudentLayout({ children }: PropsWithChildren) {
             <aside
                 className={`${
                     sidebarOpen ? 'w-72' : 'w-20'
-                } bg-white text-gray-800 transition-all duration-300 ease-in-out flex flex-col shadow-lg overflow-hidden`}
+                } bg-white text-gray-800 transition-all duration-300 ease-in-out flex flex-col shadow-lg h-screen sticky top-0 overflow-y-auto`}
             >
                 {/* Header with User Profile */}
                 <div className={`p-6 border-b border-gray-200 ${!sidebarOpen ? 'flex justify-center' : ''}`}>

@@ -12,8 +12,6 @@ export function GlobalLoading() {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        let loadingTimeout: NodeJS.Timeout | null = null;
-
         const startLoading = (event: { detail?: { visit?: { url?: { pathname?: string } } } }) => {
             // Verifica se a URL de destino está na lista de exclusão
             const targetUrl = event.detail?.visit?.url?.pathname || '';
@@ -21,17 +19,11 @@ export function GlobalLoading() {
 
             if (isExcluded) return;
 
-            // Só mostra o loading se demorar mais de 250ms
-            loadingTimeout = setTimeout(() => {
-                setIsLoading(true);
-            }, 250);
+            // Sem delay - loading aparece imediatamente
+            setIsLoading(true);
         };
 
         const finishLoading = () => {
-            // Cancela o timeout se a requisição terminar antes de 250ms
-            if (loadingTimeout) {
-                clearTimeout(loadingTimeout);
-            }
             setIsLoading(false);
         };
 
@@ -40,9 +32,6 @@ export function GlobalLoading() {
         const removeError = router.on('error', finishLoading);
 
         return () => {
-            if (loadingTimeout) {
-                clearTimeout(loadingTimeout);
-            }
             removeStart();
             removeSuccess();
             removeError();
