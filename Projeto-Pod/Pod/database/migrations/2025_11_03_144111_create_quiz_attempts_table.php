@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('quiz_attempts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
-            $table->decimal('score', 5, 2)->nullable();
-            $table->enum('status', ['in_progress', 'completed'])->default('in_progress');
-            $table->timestamp('started_at')->nullable();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('quiz_id')->constrained('quizzes')->onDelete('cascade');
+            $table->integer('score')->default(0);
+            $table->integer('correct_answers')->default(0);
+            $table->integer('total_questions')->default(0);
+            $table->decimal('accuracy', 5, 2)->default(0);
+            $table->integer('time_spent_seconds')->default(0);
             $table->timestamp('completed_at')->nullable();
-            $table->integer('time_taken')->nullable()->comment('Tempo em segundos');
             $table->timestamps();
         });
     }

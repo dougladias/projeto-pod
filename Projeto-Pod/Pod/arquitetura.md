@@ -1,102 +1,344 @@
-# ESPECIFICAÇÃO – CAÇA AO VAPE
+projeto-caca-vape/
+│
+├── app/
+│   ├── Models/
+│   │   ├── User.php
+│   │   ├── Student.php
+│   │   ├── Admin.php
+│   │   ├── Quiz.php
+│   │   ├── Pergunta.php
+│   │   ├── Resposta.php
+│   │   ├── QuizAttempt.php
+│   │   ├── QuizAnswer.php
+│   │   ├── Achievement.php
+│   │   ├── UserAchievement.php
+│   │   └── Avatar.php
+│   │
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Auth/
+│   │   │   │   ├── LoginController.php
+│   │   │   │   ├── RegisterController.php
+│   │   │   │   └── PasswordResetController.php
+│   │   │   ├── Student/
+│   │   │   │   ├── DashboardController.php
+│   │   │   │   ├── QuizController.php
+│   │   │   │   ├── RankingController.php
+│   │   │   │   └── ProfileController.php
+│   │   │   └── Admin/
+│   │   │       ├── DashboardController.php
+│   │   │       ├── StudentController.php
+│   │   │       ├── QuizController.php
+│   │   │       ├── PerguntaController.php
+│   │   │       └── ReportController.php
+│   │   │
+│   │   ├── Requests/
+│   │   │   ├── Auth/
+│   │   │   │   ├── LoginRequest.php
+│   │   │   │   └── RegisterRequest.php
+│   │   │   ├── Student/
+│   │   │   │   └── QuizAnswerRequest.php
+│   │   │   └── Admin/
+│   │   │       ├── PerguntaRequest.php
+│   │   │       └── QuizRequest.php
+│   │   │
+│   │   └── Middleware/
+│   │       ├── EnsureUserIsStudent.php
+│   │       ├── EnsureUserIsAdmin.php
+│   │       └── TrackDailyStreak.php
+│   │
+│   ├── Services/
+│   │   ├── Auth/
+│   │   │   └── AuthService.php
+│   │   ├── Quiz/
+│   │   │   ├── QuizService.php
+│   │   │   └── ScoringService.php
+│   │   ├── Ranking/
+│   │   │   └── RankingService.php
+│   │   ├── Achievement/
+│   │   │   └── AchievementService.php
+│   │   └── Student/
+│   │       └── ProgressService.php
+│   │
+│   └── Repositories/
+│       ├── Contracts/
+│       │   ├── UserRepositoryInterface.php
+│       │   ├── QuizRepositoryInterface.php
+│       │   └── PerguntaRepositoryInterface.php
+│       └── Eloquent/
+│           ├── UserRepository.php
+│           ├── QuizRepository.php
+│           └── PerguntaRepository.php
+│
+├── resources/
+│   ├── js/
+│   │   ├── Components/
+│   │   │   ├── Common/
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Input.jsx
+│   │   │   │   ├── Card.jsx
+│   │   │   │   ├── Modal.jsx
+│   │   │   │   └── Loading.jsx
+│   │   │   ├── Layout/
+│   │   │   │   ├── StudentLayout.jsx
+│   │   │   │   ├── AdminLayout.jsx
+│   │   │   │   ├── Navbar.jsx
+│   │   │   │   └── Sidebar.jsx
+│   │   │   ├── Quiz/
+│   │   │   │   ├── QuizCard.jsx
+│   │   │   │   ├── QuestionCard.jsx
+│   │   │   │   ├── AnswerOption.jsx
+│   │   │   │   ├── QuizTimer.jsx
+│   │   │   │   └── QuizResult.jsx
+│   │   │   ├── Dashboard/
+│   │   │   │   ├── StatsCard.jsx
+│   │   │   │   ├── ProgressChart.jsx
+│   │   │   │   ├── AchievementBadge.jsx
+│   │   │   │   └── RecentActivity.jsx
+│   │   │   └── Ranking/
+│   │   │       ├── RankingTable.jsx
+│   │   │       ├── RankingItem.jsx
+│   │   │       └── TopThree.jsx
+│   │   │
+│   │   ├── Pages/
+│   │   │   ├── Auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   └── ForgotPassword.jsx
+│   │   │   ├── Student/
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── QuizList.jsx
+│   │   │   │   ├── QuizPlay.jsx
+│   │   │   │   ├── Ranking.jsx
+│   │   │   │   └── Profile.jsx
+│   │   │   └── Admin/
+│   │   │       ├── Dashboard.jsx
+│   │   │       ├── Students.jsx
+│   │   │       ├── Quizzes.jsx
+│   │   │       ├── Questions.jsx
+│   │   │       └── Reports.jsx
+│   │   │
+│   │   ├── Hooks/
+│   │   │   ├── useAuth.js
+│   │   │   ├── useQuiz.js
+│   │   │   └── useRanking.js
+│   │   │
+│   │   ├── Store/
+│   │   │   ├── authStore.js
+│   │   │   ├── quizStore.js
+│   │   │   └── userStore.js
+│   │   │
+│   │   ├── Utils/
+│   │   │   ├── api.js
+│   │   │   ├── helpers.js
+│   │   │   └── constants.js
+│   │   │
+│   │   └── app.jsx
+│   │
+│   └── css/
+│       └── app.css
+│
+├── database/
+│   ├── migrations/
+│   │   ├── 2024_01_01_000000_create_users_table.php
+│   │   ├── 2024_01_01_000001_create_students_table.php
+│   │   ├── 2024_01_01_000002_create_admins_table.php
+│   │   ├── 2024_01_01_000003_create_avatars_table.php
+│   │   ├── 2024_01_01_000004_create_quizzes_table.php
+│   │   ├── 2024_01_01_000005_create_perguntas_table.php (sua tabela)
+│   │   ├── 2024_01_01_000006_create_respostas_table.php (sua tabela)
+│   │   ├── 2024_01_01_000007_create_quiz_perguntas_table.php (pivot)
+│   │   ├── 2024_01_01_000008_create_quiz_attempts_table.php
+│   │   ├── 2024_01_01_000009_create_quiz_answers_table.php
+│   │   ├── 2024_01_01_000010_create_achievements_table.php
+│   │   └── 2024_01_01_000011_create_user_achievements_table.php
+│   │
+│   └── seeders/
+│       ├── AvatarSeeder.php
+│       ├── PerguntaSeeder.php
+│       ├── QuizSeeder.php
+│       └── AchievementSeeder.php
+│
+└── routes/
+    ├── web.php
+    └── api.php
+```
 
-## 1. Visão Geral do Sistema
+## 2. Tabelas do Banco de Dados
 
-O sistema é um jogo educacional web voltado para estudantes do ensino fundamental/médio, com o objetivo de ensinar sobre os malefícios do uso do vape por meio de quizzes interativos, gamificação (níveis, rankings, conquistas) e acompanhamento de desempenho.
+### Tabelas Principais
+```
+users 
+├── id (PK)
+├── name
+├── email (unique)
+├── email_verified_at
+├── password
+├── remember_token
+├── school (adicionado)
+├── birth_date (adicionado)
+├── cpf (unique, adicionado)
+├── school_year (enum: '6','7','8','9','1','2','3', adicionado)
+├── gender (enum: 'male','female','other', adicionado)
+├── language (default 'pt-BR', adicionado)
+├── phone (adicionado)
+├── avatar (adicionado)
+├── role (enum: 'admin','aluno', adicionado)
+├── created_at
+└── updated_at
 
-## 2. Fluxo de Interação do Usuário (User Flow)
+quizzes
+├── id (PK)
+├── title
+├── description
+├── theme
+├── difficulty (enum: 'facil', 'medio', 'dificil')
+├── points_reward
+├── time_limit_minutes
+├── is_active
+├── order
+├── created_at
+└── updated_at
 
-### Fluxo Principal
+perguntas (sua tabela existente)
+├── id_pergunta (PK)
+├── texto_pergunta
+└── categoria
 
-#### Tela de Login
-- Aluno insere CPF e senha.
-- Opções: "Lembrar-me", "Esqueceu a senha?", "Não tem conta? Cadastre-se".
+respostas (sua tabela existente)
+├── id_resposta (PK)
+├── id_pergunta (FK -> perguntas)
+├── texto_resposta
+└── correta (BIT)
 
-#### Tela de Cadastro
-Campos obrigatórios:
-- Nome completo
-- Escola
-- Data de nascimento
-- CPF
-- Ano escolar
-- Sexo
-- E-mail
-- Telefone com DDD
-- Avatar (seleção visual)
-- Aceite dos termos e condições
-- Botão: "Cadastrar"
+quiz_perguntas (tabela pivot para relacionar quiz com perguntas)
+├── id (PK)
+├── quiz_id (FK -> quizzes)
+├── pergunta_id (FK -> perguntas.id_pergunta)
+├── order
+├── points
+├── created_at
+└── updated_at
 
-#### Tela de Dashboard (Pós-login)
-Exibe:
-- Nome do aluno
-- Nível atual
-- Precisão (% de acertos)
-- Sequência de dias ativos
-- Posição no ranking
-- Progresso recente (últimos quizzes)
-- Conquistas (medalhas/troféus)
+quiz_attempts
+├── id (PK)
+├── user_id (FK -> users)
+├── quiz_id (FK -> quizzes)
+├── score
+├── correct_answers
+├── total_questions
+├── accuracy
+├── time_spent_seconds
+├── completed_at
+├── created_at
+└── updated_at
 
-Botões de ação rápida:
-- "Fazer Novo Quiz"
-- "Ver Ranking"
-- "Sair"
+quiz_answers
+├── id (PK)
+├── quiz_attempt_id (FK -> quiz_attempts)
+├── pergunta_id (FK -> perguntas)
+├── resposta_id (FK -> respostas)
+├── is_correct
+├── created_at
+└── updated_at
 
-#### Tela de Quiz
-- Título do quiz (ex: "Riscos à Saúde", "Uso Responsável")
-- Pergunta com 4 alternativas (A, B, C, D)
-- Botão "Confirmar"
+achievements
+├── id (PK)
+├── name
+├── description
+├── icon
+├── type (enum: 'quiz_count', 'streak', 'accuracy', 'points')
+├── requirement_value
+├── points_reward
+├── is_active
+├── created_at
+└── updated_at
 
-Ao finalizar:
-- Mostra pontuação obtida
-- Opções: "Ver Ranking" ou "Iniciar Outro Quiz"
+user_achievements
+├── id (PK)
+├── user_id (FK -> users)
+├── achievement_id (FK -> achievements)
+├── unlocked_at
+├── created_at
+└── updated_at
+```
 
-#### Tela de Ranking
-Classificação geral com:
-- Posição
-- Nome do aluno
-- Nível
-- Pontos
-- Precisão (%)
-- Sequência de dias ativos
-- Total de quizzes respondidos
-- Destaque para os Top 3
+## 3. Rotas Principais
 
-#### Tela de Perfil (Meu Perfil)
-- Dados cadastrais
-- Histórico de quizzes
-- Conquistas desbloqueadas
+### API Routes (api.php)
+```
+POST   /api/auth/login
+POST   /api/auth/register
+POST   /api/auth/logout
+POST   /api/auth/password/reset
 
-## 3. Especificação de Requisitos
+GET    /api/student/dashboard
+GET    /api/student/quizzes
+GET    /api/student/quizzes/{id}
+POST   /api/student/quizzes/{id}/start
+POST   /api/student/quizzes/attempts/{id}/submit
+GET    /api/student/ranking
+GET    /api/student/profile
+PUT    /api/student/profile
 
-### 3.1. Requisitos Funcionais (RF)
+GET    /api/admin/dashboard
+GET    /api/admin/students
+GET    /api/admin/students/{id}
+PUT    /api/admin/students/{id}
+DELETE /api/admin/students/{id}
+GET    /api/admin/quizzes
+POST   /api/admin/quizzes
+PUT    /api/admin/quizzes/{id}
+DELETE /api/admin/quizzes/{id}
+GET    /api/admin/perguntas
+POST   /api/admin/perguntas
+PUT    /api/admin/perguntas/{id}
+DELETE /api/admin/perguntas/{id}
+GET    /api/admin/reports
+```
 
-| ID | Descrição |
-|----|-----------|
-| RF-01 | O sistema deve permitir o cadastro de novos usuários com dados pessoais e escolares. |
-| RF-02 | O sistema deve autenticar usuários via CPF e senha. |
-| RF-03 | O sistema deve exibir um dashboard com informações de progresso, nível, precisão e ranking. |
-| RF-04 | O sistema deve disponibilizar quizzes temáticos sobre os malefícios do vape. |
-| RF-05 | Cada quiz deve conter perguntas de múltipla escolha com 4 alternativas. |
-| RF-06 | O sistema deve calcular e exibir a pontuação e precisão do usuário após cada quiz. |
-| RF-07 | O sistema deve manter um ranking geral com base em pontos, precisão e consistência (sequência de uso). |
-| RF-08 | O sistema deve registrar conquistas (medalhas/troféus) com base no desempenho e atividade. |
-| RF-09 | O sistema deve permitir ao usuário visualizar seu perfil e histórico de atividades. |
-| RF-10 | O sistema deve permitir seleção de avatar no cadastro. |
+### Web Routes (web.php - usando Inertia)
+```
+GET    /
+GET    /login
+POST   /login
+GET    /cadastro
+POST   /cadastro
 
-### 3.2. Requisitos Não Funcionais (RNF)
+GET    /aluno/dashboard
+GET    /aluno/quizzes
+GET    /aluno/quizzes/{id}
+GET    /aluno/ranking
+GET    /aluno/perfil
 
-| ID | Descrição |
-|----|-----------|
-| RNF-01 | A interface deve ser responsiva e acessível em dispositivos móveis e desktop. |
-| RNF-02 | O sistema deve carregar telas em até 2 segundos em conexão padrão. |
-| RNF-03 | Os dados dos usuários devem ser armazenados com segurança (criptografia de senha, validação de CPF). |
-| RNF-04 | O sistema deve ser compatível com navegadores modernos (Chrome, Firefox, Edge, Safari). |
-| RNF-05 | Deve haver backup diário dos dados dos usuários e progresso. |
+GET    /admin/dashboard
+GET    /admin/alunos
+GET    /admin/quizzes
+GET    /admin/perguntas
+GET    /admin/relatorios
+```
 
-### 3.3. Requisitos de Conteúdo Educacional
+## 4. Fluxo de Dados
+```
+React Frontend (Vite)
+      ↕️ (Axios/Fetch)
+Laravel API Routes
+      ↕️
+Controllers
+      ↕️
+Services (Business Logic)
+      ↕️
+Repositories
+      ↕️
+Models (Eloquent ORM)
+      ↕️
+MySQL Database
 
-| ID | Descrição |
-|----|-----------|
-| RC-01 | Os quizzes devem abordar temas como: riscos à saúde, componentes do vape, uso irresponsável, dependência química, impacto social. |
-| RC-02 | As perguntas devem ser validadas por especialistas em saúde ou educação. |
-| RC-03 | O feedback pós-quiz deve incluir explicações educativas para respostas incorretas. |
+| #   | Categoria                             | Perguntas | %   |
+|-----|---------------------------------------|-----------|-----|
+| 1   | Aspectos Legais, Sociais e Prevenção  | 21        | 21% |
+| 2   | Riscos para Grupos Vulneráveis        | 17        | 17% |
+| 3   | Efeitos Respiratórios e Pulmonares    | 17        | 17% |
+| 4   | Dependência e Nicotina                | 17        | 17% |
+| 5   | Composição e Substâncias Químicas     | 15        | 15% |
+| 6   | Efeitos Cardiovasculares e Sistêmicos | 13        | 13% |

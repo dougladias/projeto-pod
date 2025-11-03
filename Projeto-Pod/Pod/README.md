@@ -14,17 +14,10 @@ Sistema educacional gamificado para conscientização sobre os riscos do vaping 
 
 ```bash
 # 1. Instalar dependências
-composer install
-npm install
+composer install    # Terminal 1 - Backend
+npm install         # Terminal 2 - Frontend
 
-# 2. Configurar ambiente (Somente quanto tiver Mudanças)
-cp .env
-php artisan key:generate
-
-# 3. Rodar migrations (Somente quanto tiver Mudanças)
-php artisan migrate
-
-# 4. Iniciar servidores (2 terminais)
+# 2. Iniciar servidores (2 terminais)
 php artisan serve    # Terminal 1 - Backend
 npm run dev          # Terminal 2 - Frontend
 ```
@@ -34,7 +27,6 @@ Acesse: **http://localhost:8000**
 ## 📝 Observações
 
 - Banco de dados está na nuvem (Railway)
-- Não precisa rodar Docker
 - Credenciais já estão no `.env`
 
 ---

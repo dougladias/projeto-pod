@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('quizzes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->text('description');
-            $table->integer('time_limit')->comment('Tempo em minutos');
-            $table->integer('total_questions')->default(20);
+            $table->text('description')->nullable();
+            $table->string('theme')->nullable();
+            $table->enum('difficulty', ['facil', 'medio', 'dificil'])->default('medio');
+            $table->integer('points_reward')->default(0);
+            $table->integer('time_limit_minutes')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

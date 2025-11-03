@@ -8,13 +8,10 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
+    // Users Seeder
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // User Admin
         User::firstOrCreate(
             ['email' => 'admin@dev.com'],
             [
@@ -30,6 +27,29 @@ class DatabaseSeeder extends Seeder
                 'avatar' => null,
                 'role' => 'admin',
             ]
-        );    
+        );
+
+        // User Student
+        User::firstOrCreate(
+            ['email' => 'student@dev.com'],
+            [
+                'name' => 'Estudante de Teste',
+                'password' => 'student123',
+                'school' => 'Escola Modelo',
+                'birth_date' => '2005-06-15',
+                'cpf' => '987.654.321-00',
+                'school_year' => '9',
+                'gender' => 'male',
+                'language' => 'pt-BR',
+                'phone' => '(11) 91234-5678',
+                'avatar' => null,
+                'role' => 'aluno',
+            ]
+        );
+
+        // Chamar PerguntaSeeder
+        $this->call([
+            PerguntaSeeder::class,
+        ]);
     }
 }

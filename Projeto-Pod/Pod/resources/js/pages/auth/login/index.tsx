@@ -1,11 +1,4 @@
-'use client';
-
 import { Head } from '@inertiajs/react';
-import { useState } from 'react';
-import cenarioLogin from '@/assets/cenarioLogin.svg';
-import LogoQuiz from '@/assets/LogoQuiz.svg';
-import avatarM from '@/assets/avatarM.svg';
-import { ImagePreloader } from './_components/ImagePreloader';
 import { LoginBanner } from './_components/LoginBanner';
 import { LoginForm } from './_components/LoginForm';
 
@@ -15,17 +8,6 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
-    const [imagesLoaded, setImagesLoaded] = useState(false);
-
-    if (!imagesLoaded) {
-        return (
-            <ImagePreloader
-                images={[cenarioLogin, LogoQuiz, avatarM]}
-                onLoadComplete={() => setImagesLoaded(true)}
-            />
-        );
-    }
-
     return (
         <>
             <Head title="Quiz Missão - Login" />
