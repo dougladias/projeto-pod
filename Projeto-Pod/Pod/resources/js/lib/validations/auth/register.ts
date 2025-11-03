@@ -42,7 +42,7 @@ export const registerSchema = z.object({
     password: z
         .string()
         .min(1, 'Senha obrigatória')
-        .min(6, 'Mínimo 6 caracteres')
+        .min(8, 'Senha deve ter no mínimo 8 caracteres')
         .max(50, 'Senha muito longa'),
     password_confirmation: z
         .string()
