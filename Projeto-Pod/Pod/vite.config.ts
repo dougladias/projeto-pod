@@ -14,9 +14,12 @@ export default defineConfig({
         }),
         react(),
         tailwindcss(),
-        wayfinder({
-            formVariants: true,
-        }),
+        // Desabilita wayfinder em produção (Heroku)
+        ...(process.env.NODE_ENV !== 'production' ? [
+            wayfinder({
+                formVariants: true,
+            })
+        ] : []),
     ],
     resolve: {
         alias: {
