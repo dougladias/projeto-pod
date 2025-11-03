@@ -47,9 +47,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Chamar PerguntaSeeder
+        // Chamar Seeders na ordem correta
         $this->call([
-            PerguntaSeeder::class,
+            PerguntaSeeder::class,      // 1º - Criar perguntas e respostas
+            QuizSeeder::class,          // 2º - Criar quizzes e associar perguntas
+            AchievementSeeder::class,   // 3º - Criar conquistas
         ]);
     }
 }

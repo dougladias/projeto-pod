@@ -3,7 +3,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { FileQuestion, Clock, CheckCircle } from 'lucide-react';
 import { useQuizActions } from '@/hooks/useQuizActions';
-import type { QuizData } from '@/types/quiz';
 
 interface QuizCardProps {
     quiz: {
@@ -18,7 +17,6 @@ interface QuizCardProps {
         is_completed: boolean;
         last_attempt: string | null;
     };
-    onStartQuiz: (quizData: QuizData) => void;
 }
 
 const difficultyColors = {
@@ -34,13 +32,11 @@ const getDifficultyBadge = (category: string) => {
     return color;
 };
 
-export function QuizCard({ quiz, onStartQuiz }: QuizCardProps) {
+export function QuizCard({ quiz }: QuizCardProps) {
     const { startQuiz, isLoading } = useQuizActions();
 
     const handleStartQuiz = () => {
-        startQuiz(quiz.id, (data) => {
-            onStartQuiz(data);
-        });
+        startQuiz(quiz.id);
     };
 
     const scoreColor = quiz.best_score >= 90 ? 'text-green-600' : quiz.best_score >= 70 ? 'text-yellow-600' : 'text-red-600';

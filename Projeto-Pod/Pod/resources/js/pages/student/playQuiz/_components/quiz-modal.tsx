@@ -32,7 +32,7 @@ interface QuizModalProps {
 }
 
 export function QuizModal({ isOpen, onClose, quiz, questions, attemptId }: QuizModalProps) {
-    const { answerQuestion, finishQuiz, isLoading } = useQuizActions();
+    const { isLoading } = useQuizActions();
 
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedOption, setSelectedOption] = useState<number | null>(null);
@@ -50,20 +50,10 @@ export function QuizModal({ isOpen, onClose, quiz, questions, attemptId }: QuizM
     const handleFinishQuiz = useCallback(() => {
         if (!attemptId) return;
 
-        finishQuiz(
-            attemptId,
-            (data) => {
-                setScore({
-                    correct: data.correct_answers,
-                    total: data.total_questions,
-                });
-                setIsFinished(true);
-            },
-            (error) => {
-                console.error('Erro ao finalizar quiz:', error);
-            }
-        );
-    }, [attemptId, finishQuiz]);
+        // TODO: Implementar finish quiz quando necessário
+        console.log('Finalizar quiz', attemptId);
+        setIsFinished(true);
+    }, [attemptId]);
 
     // Inicializa o timer
     useEffect(() => {
@@ -106,22 +96,9 @@ export function QuizModal({ isOpen, onClose, quiz, questions, attemptId }: QuizM
     const handleConfirmAnswer = () => {
         if (!selectedOption || !attemptId || isAnswered) return;
 
-        answerQuestion(
-            attemptId,
-            currentQuestion.id,
-            selectedOption,
-            (data) => {
-                setIsAnswered(true);
-                setFeedback(data);
-                setScore((prev) => ({
-                    correct: prev.correct + (data.is_correct ? 1 : 0),
-                    total: prev.total + 1,
-                }));
-            },
-            (error) => {
-                console.error('Erro ao enviar resposta:', error);
-            }
-        );
+        // TODO: Implementar answer question quando necessário
+        console.log('Responder pergunta', attemptId, currentQuestion.id, selectedOption);
+        setIsAnswered(true);
     };
 
     const handleNextQuestion = () => {

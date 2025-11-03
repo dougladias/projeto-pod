@@ -2,14 +2,15 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-function Card({ className, ...props }: React.ComponentProps<"div">) {
+function Card({ className, style, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "text-card-foreground flex flex-col gap-6 py-6 shadow-sm",
         className
       )}
+      style={{ backgroundColor: '#F4F7FF', border: '1px solid rgba(9, 26, 188, 0.2)', borderRadius: '15px', ...style }}
       {...props}
     />
   )

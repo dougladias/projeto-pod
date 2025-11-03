@@ -1,11 +1,7 @@
-import { useState, useMemo, lazy, Suspense } from 'react';
+import { useState, useMemo } from 'react';
 import StudentLayout from '@/layouts/student/student-layout';
 import { Filters } from './_components/filters';
 import { QuizCard } from './_components/quiz-card';
-import type { QuizData } from '@/types/quiz';
-
-// Lazy load do modal - só carrega quando abrir (economiza ~200KB)
-const QuizModal = lazy(() => import('./_components/quiz-modal').then(module => ({ default: module.QuizModal })));
 
 interface Quiz {
     id: number;
@@ -22,15 +18,12 @@ interface Quiz {
 
 interface Props {
     quizzes: Quiz[];
-    quizData?: QuizData;
 }
 
-export default function QuizzesIndex({ quizzes, quizData }: Props) {
+export default function QuizzesIndex({ quizzes }: Props) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [selectedStatus, setSelectedStatus] = useState('all');
-    const [isQuizModalOpen, setIsQuizModalOpen] = useState(!!quizData);
-    const [currentQuizData, setCurrentQuizData] = useState<QuizData | null>(quizData || null);
 
     // Filtra os quizzes
     const filteredQuizzes = useMemo(() => {
@@ -79,10 +72,6 @@ export default function QuizzesIndex({ quizzes, quizData }: Props) {
                             <QuizCard
                                 key={quiz.id}
                                 quiz={quiz}
-                                onStartQuiz={(quizData) => {
-                                    setCurrentQuizData(quizData);
-                                    setIsQuizModalOpen(true);
-                                }}
                             />
                         ))
                     ) : (
@@ -91,22 +80,6 @@ export default function QuizzesIndex({ quizzes, quizData }: Props) {
                         </div>
                     )}
                 </div>
-
-                {/* Quiz Modal - Lazy loaded */}
-                {isQuizModalOpen && (
-                    <Suspense fallback={<div className="fixed inset-0 bg-black/50 flex items-center justify-center"><div className="text-white">Carregando...</div></div>}>
-                        <QuizModal
-                            isOpen={isQuizModalOpen}
-                            onClose={() => {
-                                setIsQuizModalOpen(false);
-                                setCurrentQuizData(null);
-                            }}
-                            quiz={currentQuizData?.quiz || null}
-                            questions={currentQuizData?.questions || []}
-                            attemptId={currentQuizData?.attempt_id || null}
-                        />
-                    </Suspense>
-                )}
             </div>
         </StudentLayout>
     );

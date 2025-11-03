@@ -35,7 +35,7 @@ export default function StudentLayout({ children }: PropsWithChildren) {
 
     const menuItems = [
         { name: 'Dashboard', icon: BookOpen, href: '/app/dashboard' },
-        { name: 'Jogar Quiz', icon: Play, href: '/app/playQuiz' },        
+        { name: 'Jogar Quiz', icon: Play, href: '/app/playQuiz' },
         { name: 'Meus Quizzes', icon: BookOpen, href: '/app/myQuiz' },
     ];
 
@@ -48,7 +48,7 @@ export default function StudentLayout({ children }: PropsWithChildren) {
     };
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+        <div className="flex min-h-screen bg-white">
             {/* Sidebar */}
             <aside
                 className={`${

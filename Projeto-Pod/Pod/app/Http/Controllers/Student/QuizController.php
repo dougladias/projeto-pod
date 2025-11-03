@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pergunta;
 use App\Models\Quiz;
+use App\Models\QuizAnswer;
 use App\Models\QuizAttempt;
-use App\Models\QuizAttemptAnswer;
-use App\Models\QuizCorrectAnswer;
-use App\Models\QuizQuestion;
-use App\Models\UserAnsweredQuestion;
+use App\Models\Resposta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -22,23 +21,23 @@ class QuizController extends Controller
     {
         $user = $request->user();
 
-        // Busca todas as tentativas do usuário de uma vez (1 query)
+        // Busca todas as tentativas do usuário
         $userAttempts = QuizAttempt::where('user_id', $user->id)
-            ->where('status', 'completed')
-            ->select('quiz_id', 'score', 'completed_at')
+            ->whereNotNull('completed_at')
+            ->select('quiz_id', 'score', 'accuracy', 'completed_at')
             ->get()
             ->groupBy('quiz_id');
 
-        // Busca quizzes com categoria (1 query)
-        $quizzes = Quiz::with('category')
-            ->select('id', 'title', 'description', 'category_id', 'time_limit', 'total_questions')
+        // Busca quizzes ativos
+        $quizzes = Quiz::active()
+            ->ordered()
+            ->select('id', 'title', 'description', 'theme', 'difficulty', 'points_reward', 'time_limit_minutes')
             ->get()
             ->map(function ($quiz) use ($userAttempts) {
-                // Pega tentativas deste quiz (já em memória)
                 $attempts = $userAttempts->get($quiz->id, collect());
 
-                // Calcula estatísticas
                 $bestScore = $attempts->max('score') ?? 0;
+                $bestAccuracy = $attempts->max('accuracy') ?? 0;
                 $attemptsCount = $attempts->count();
                 $lastAttempt = $attempts->sortByDesc('completed_at')->first();
 
@@ -46,10 +45,13 @@ class QuizController extends Controller
                     'id' => $quiz->id,
                     'title' => $quiz->title,
                     'description' => $quiz->description,
-                    'category' => $quiz->category->name,
-                    'time_limit' => $quiz->time_limit,
+                    'theme' => $quiz->theme,
+                    'difficulty' => $quiz->difficulty,
+                    'points_reward' => $quiz->points_reward,
+                    'time_limit_minutes' => $quiz->time_limit_minutes,
                     'total_questions' => $quiz->total_questions,
-                    'best_score' => round($bestScore, 2),
+                    'best_score' => $bestScore,
+                    'best_accuracy' => round($bestAccuracy, 2),
                     'attempts_count' => $attemptsCount,
                     'is_completed' => $attemptsCount > 0,
                     'last_attempt' => $lastAttempt ? $lastAttempt->completed_at->diffForHumans() : null,
@@ -68,74 +70,84 @@ class QuizController extends Controller
     {
         $user = $request->user();
 
-        // Busca estatísticas em uma única query otimizada
+        // Busca estatísticas do usuário
         $stats = QuizAttempt::where('user_id', $user->id)
-            ->where('status', 'completed')
+            ->whereNotNull('completed_at')
             ->selectRaw('
                 COUNT(DISTINCT quiz_id) as completed_quizzes,
                 COUNT(*) as total_attempts,
-                AVG(score) as average_score,
+                SUM(score) as total_score,
+                AVG(accuracy) as average_accuracy,
                 MAX(score) as best_score
             ')
             ->first();
 
+        // Busca tentativas recentes com detalhes do quiz
+        $recentAttempts = QuizAttempt::with('quiz:id,title,theme,difficulty')
+            ->where('user_id', $user->id)
+            ->whereNotNull('completed_at')
+            ->select('id', 'quiz_id', 'score', 'correct_answers', 'total_questions', 'accuracy', 'time_spent_seconds', 'completed_at')
+            ->orderBy('completed_at', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(function ($attempt) {
+                return [
+                    'id' => $attempt->id,
+                    'quiz_title' => $attempt->quiz->title,
+                    'quiz_theme' => $attempt->quiz->theme,
+                    'quiz_difficulty' => $attempt->quiz->difficulty,
+                    'score' => $attempt->score,
+                    'accuracy' => round($attempt->accuracy, 2),
+                    'correct_answers' => $attempt->correct_answers,
+                    'total_questions' => $attempt->total_questions,
+                    'time_spent' => $attempt->time_spent_minutes,
+                    'completed_at' => $attempt->completed_at->diffForHumans(),
+                    'passed' => $attempt->isPassed(),
+                ];
+            });
+
         return Inertia::render('student/myQuiz/index', [
             'stats' => [
                 'completed_quizzes' => $stats->completed_quizzes ?? 0,
-                'total_quizzes' => Quiz::count(),
+                'total_quizzes' => Quiz::active()->count(),
                 'total_attempts' => $stats->total_attempts ?? 0,
-                'average_score' => round($stats->average_score ?? 0, 2),
-                'best_score' => round($stats->best_score ?? 0, 2),
+                'total_score' => $stats->total_score ?? 0,
+                'average_accuracy' => round($stats->average_accuracy ?? 0, 2),
+                'best_score' => $stats->best_score ?? 0,
             ],
+            'recent_attempts' => $recentAttempts,
         ]);
     }
 
     /**
-     * Inicia um quiz - seleciona 20 perguntas não respondidas
+     * Inicia um quiz - carrega as perguntas
      */
     public function start(Request $request, Quiz $quiz)
     {
         $user = $request->user();
 
-        // Otimizado: Busca perguntas já respondidas em uma única query
-        $answeredQuestionIds = UserAnsweredQuestion::where('user_id', $user->id)
-            ->where('quiz_id', $quiz->id)
-            ->pluck('question_id');
-
-        // Conta perguntas disponíveis de forma eficiente
-        $totalQuestions = QuizQuestion::where('quiz_id', $quiz->id)->count();
-        $availableCount = $totalQuestions - $answeredQuestionIds->count();
-
-        // Reseta o pool se necessário
-        if ($availableCount < $quiz->total_questions) {
-            UserAnsweredQuestion::where('user_id', $user->id)
-                ->where('quiz_id', $quiz->id)
-                ->delete();
-            $answeredQuestionIds = collect([]);
+        // Verifica se o quiz está ativo
+        if (!$quiz->is_active) {
+            return back()->with('error', 'Quiz não está disponível');
         }
 
-        // Otimizado: Seleciona perguntas aleatórias com options em uma query
-        $questions = QuizQuestion::where('quiz_id', $quiz->id)
-            ->when($answeredQuestionIds->isNotEmpty(), function ($query) use ($answeredQuestionIds) {
-                $query->whereNotIn('id', $answeredQuestionIds);
-            })
-            ->with(['options' => function ($query) {
-                $query->select('id', 'question_id', 'option_text', 'order')
-                    ->orderBy('order');
+        // Busca as perguntas do quiz com suas respostas
+        $perguntas = $quiz->perguntas()
+            ->with(['respostas' => function ($query) {
+                $query->select('id_resposta', 'id_pergunta', 'texto_resposta')
+                      ->inRandomOrder(); // Embaralha as opções
             }])
-            ->select('id', 'quiz_id', 'question_text')
-            ->inRandomOrder()
-            ->limit($quiz->total_questions)
             ->get()
-            ->map(function ($question) {
+            ->map(function ($pergunta) {
                 return [
-                    'id' => $question->id,
-                    'question_text' => $question->question_text,
-                    'options' => $question->options->map(function ($option) {
+                    'id' => $pergunta->id_pergunta,
+                    'texto_pergunta' => $pergunta->texto_pergunta,
+                    'categoria' => $pergunta->categoria,
+                    'points' => $pergunta->pivot->points,
+                    'respostas' => $pergunta->respostas->map(function ($resposta) {
                         return [
-                            'id' => $option->id,
-                            'option_text' => $option->option_text,
-                            'order' => $option->order,
+                            'id' => $resposta->id_resposta,
+                            'texto_resposta' => $resposta->texto_resposta,
                         ];
                     })->values(),
                 ];
@@ -145,83 +157,78 @@ class QuizController extends Controller
         $attempt = QuizAttempt::create([
             'user_id' => $user->id,
             'quiz_id' => $quiz->id,
-            'status' => 'in_progress',
-            'started_at' => now(),
+            'total_questions' => $perguntas->count(),
+            'correct_answers' => 0,
+            'score' => 0,
+            'accuracy' => 0,
+            'time_spent_seconds' => 0,
         ]);
 
-        return response()->json([
-            'props' => [
-                'quiz' => [
-                    'id' => $quiz->id,
-                    'title' => $quiz->title,
-                    'description' => $quiz->description,
-                    'time_limit' => $quiz->time_limit,
-                    'total_questions' => $quiz->total_questions,
-                ],
-                'attempt_id' => $attempt->id,
-                'questions' => $questions,
+        return Inertia::render('student/playQuiz/quiz', [
+            'attempt_id' => $attempt->id,
+            'quiz' => [
+                'id' => $quiz->id,
+                'title' => $quiz->title,
+                'description' => $quiz->description,
+                'theme' => $quiz->theme,
+                'difficulty' => $quiz->difficulty,
+                'time_limit_minutes' => $quiz->time_limit_minutes,
+                'points_reward' => $quiz->points_reward,
+                'total_questions' => $perguntas->count(),
             ],
+            'questions' => $perguntas,
         ]);
     }
 
     /**
-     * Valida uma resposta e retorna feedback imediato
+     * Valida uma resposta e salva
      */
     public function answer(Request $request, QuizAttempt $attempt)
     {
         $request->validate([
-            'question_id' => 'required|exists:quiz_questions,id',
-            'selected_option_id' => 'required|exists:quiz_question_options,id',
+            'pergunta_id' => 'required|exists:perguntas,id_pergunta',
+            'resposta_id' => 'required|exists:respostas,id_resposta',
         ]);
 
         $user = $request->user();
 
         // Verifica se a tentativa pertence ao usuário
         if ($attempt->user_id !== $user->id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return response()->json(['error' => 'Não autorizado'], 403);
         }
 
-        // Verifica se a tentativa está ativa
-        if ($attempt->status !== 'in_progress') {
-            return response()->json(['error' => 'Quiz already completed'], 400);
+        // Verifica se já completou o quiz
+        if ($attempt->isCompleted()) {
+            return response()->json(['error' => 'Quiz já finalizado'], 400);
         }
 
-        // Verifica se já respondeu essa pergunta nesta tentativa
-        $alreadyAnswered = QuizAttemptAnswer::where('attempt_id', $attempt->id)
-            ->where('question_id', $request->question_id)
+        // Verifica se já respondeu essa pergunta
+        $alreadyAnswered = QuizAnswer::where('quiz_attempt_id', $attempt->id)
+            ->where('pergunta_id', $request->pergunta_id)
             ->exists();
 
         if ($alreadyAnswered) {
-            return response()->json(['error' => 'Question already answered'], 400);
+            return response()->json(['error' => 'Pergunta já respondida'], 400);
         }
 
         // Busca a resposta correta
-        $correctAnswer = QuizCorrectAnswer::where('question_id', $request->question_id)->first();
+        $respostaCorreta = Resposta::where('id_pergunta', $request->pergunta_id)
+            ->where('correta', true)
+            ->first();
 
-        $isCorrect = $correctAnswer->correct_option_id == $request->selected_option_id;
+        $isCorrect = $respostaCorreta->id_resposta == $request->resposta_id;
 
         // Salva a resposta
-        QuizAttemptAnswer::create([
-            'attempt_id' => $attempt->id,
-            'question_id' => $request->question_id,
-            'selected_option_id' => $request->selected_option_id,
+        QuizAnswer::create([
+            'quiz_attempt_id' => $attempt->id,
+            'pergunta_id' => $request->pergunta_id,
+            'resposta_id' => $request->resposta_id,
             'is_correct' => $isCorrect,
-            'answered_at' => now(),
         ]);
 
-        // Marca a pergunta como respondida
-        UserAnsweredQuestion::create([
-            'user_id' => $user->id,
-            'quiz_id' => $attempt->quiz_id,
-            'question_id' => $request->question_id,
-            'answered_at' => now(),
-        ]);
-
-        // Retorna feedback
         return response()->json([
             'is_correct' => $isCorrect,
-            'correct_option_id' => $correctAnswer->correct_option_id,
-            'explanation' => $correctAnswer->explanation,
+            'correct_resposta_id' => $respostaCorreta->id_resposta,
         ]);
     }
 
@@ -234,38 +241,40 @@ class QuizController extends Controller
 
         // Verifica se a tentativa pertence ao usuário
         if ($attempt->user_id !== $user->id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+            return back()->with('error', 'Não autorizado');
         }
 
-        // Verifica se a tentativa está ativa
-        if ($attempt->status !== 'in_progress') {
-            return response()->json(['error' => 'Quiz already completed'], 400);
+        // Verifica se já foi finalizado
+        if ($attempt->isCompleted()) {
+            return back()->with('error', 'Quiz já finalizado');
         }
 
-        // Calcula o score
-        $totalQuestions = QuizAttemptAnswer::where('attempt_id', $attempt->id)->count();
-        $correctAnswers = QuizAttemptAnswer::where('attempt_id', $attempt->id)
+        // Calcula estatísticas
+        $totalQuestions = QuizAnswer::where('quiz_attempt_id', $attempt->id)->count();
+        $correctAnswers = QuizAnswer::where('quiz_attempt_id', $attempt->id)
             ->where('is_correct', true)
             ->count();
 
-        $score = $totalQuestions > 0 ? ($correctAnswers / $totalQuestions) * 100 : 0;
+        $accuracy = $totalQuestions > 0 ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
+        // Calcula pontuação baseada na acurácia
+        $quiz = $attempt->quiz;
+        $score = round(($accuracy / 100) * $quiz->points_reward);
 
         // Calcula tempo gasto
-        $timeTaken = now()->diffInSeconds($attempt->started_at);
+        $timeSpent = now()->diffInSeconds($attempt->created_at);
 
         // Atualiza a tentativa
         $attempt->update([
-            'status' => 'completed',
-            'completed_at' => now(),
-            'score' => $score,
-            'time_taken' => $timeTaken,
-        ]);
-
-        return response()->json([
-            'score' => round($score, 2),
             'correct_answers' => $correctAnswers,
             'total_questions' => $totalQuestions,
-            'time_taken' => $timeTaken,
+            'accuracy' => $accuracy,
+            'score' => $score,
+            'time_spent_seconds' => $timeSpent,
+            'completed_at' => now(),
         ]);
+
+        // Redireciona para Meus Quizzes com mensagem de sucesso
+        return redirect()->route('student.myQuiz.index')->with('success', 'Quiz finalizado com sucesso!');
     }
 }

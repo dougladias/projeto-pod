@@ -2,17 +2,14 @@ projeto-caca-vape/
 │
 ├── app/
 │   ├── Models/
-│   │   ├── User.php
-│   │   ├── Student.php
-│   │   ├── Admin.php
+│   │   ├── User.php (com role: 'admin' ou 'aluno')
 │   │   ├── Quiz.php
 │   │   ├── Pergunta.php
 │   │   ├── Resposta.php
 │   │   ├── QuizAttempt.php
 │   │   ├── QuizAnswer.php
 │   │   ├── Achievement.php
-│   │   ├── UserAchievement.php
-│   │   └── Avatar.php
+│   │   └── UserAchievement.php
 │   │
 │   ├── Http/
 │   │   ├── Controllers/
@@ -45,30 +42,18 @@ projeto-caca-vape/
 │   │   └── Middleware/
 │   │       ├── EnsureUserIsStudent.php
 │   │       ├── EnsureUserIsAdmin.php
-│   │       └── TrackDailyStreak.php
+│   │       └── HandleInertiaRequests.php
 │   │
-│   ├── Services/
-│   │   ├── Auth/
-│   │   │   └── AuthService.php
-│   │   ├── Quiz/
-│   │   │   ├── QuizService.php
-│   │   │   └── ScoringService.php
-│   │   ├── Ranking/
-│   │   │   └── RankingService.php
-│   │   ├── Achievement/
-│   │   │   └── AchievementService.php
-│   │   └── Student/
-│   │       └── ProgressService.php
-│   │
-│   └── Repositories/
-│       ├── Contracts/
-│       │   ├── UserRepositoryInterface.php
-│       │   ├── QuizRepositoryInterface.php
-│       │   └── PerguntaRepositoryInterface.php
-│       └── Eloquent/
-│           ├── UserRepository.php
-│           ├── QuizRepository.php
-│           └── PerguntaRepository.php
+│   └── Services/
+│       ├── Quiz/
+│       │   ├── QuizService.php
+│       │   └── ScoringService.php
+│       ├── Ranking/
+│       │   └── RankingService.php
+│       ├── Achievement/
+│       │   └── AchievementService.php
+│       └── Student/
+│           └── ProgressService.php
 │
 ├── resources/
 │   ├── js/
@@ -140,28 +125,27 @@ projeto-caca-vape/
 │
 ├── database/
 │   ├── migrations/
-│   │   ├── 2024_01_01_000000_create_users_table.php
-│   │   ├── 2024_01_01_000001_create_students_table.php
-│   │   ├── 2024_01_01_000002_create_admins_table.php
-│   │   ├── 2024_01_01_000003_create_avatars_table.php
-│   │   ├── 2024_01_01_000004_create_quizzes_table.php
-│   │   ├── 2024_01_01_000005_create_perguntas_table.php (sua tabela)
-│   │   ├── 2024_01_01_000006_create_respostas_table.php (sua tabela)
-│   │   ├── 2024_01_01_000007_create_quiz_perguntas_table.php (pivot)
-│   │   ├── 2024_01_01_000008_create_quiz_attempts_table.php
-│   │   ├── 2024_01_01_000009_create_quiz_answers_table.php
-│   │   ├── 2024_01_01_000010_create_achievements_table.php
-│   │   └── 2024_01_01_000011_create_user_achievements_table.php
+│   │   ├── create_users_table.php
+│   │   ├── create_quizzes_table.php
+│   │   ├── create_perguntas_table.php
+│   │   ├── create_respostas_table.php
+│   │   ├── create_quiz_perguntas_table.php (pivot)
+│   │   ├── create_quiz_attempts_table.php
+│   │   ├── create_quiz_answers_table.php
+│   │   ├── create_achievements_table.php
+│   │   └── create_user_achievements_table.php
 │   │
 │   └── seeders/
-│       ├── AvatarSeeder.php
-│       ├── PerguntaSeeder.php
-│       ├── QuizSeeder.php
-│       └── AchievementSeeder.php
+│       ├── DatabaseSeeder.php
+│       ├── PerguntaSeeder.php (100 perguntas)
+│       ├── QuizSeeder.php (8 quizzes)
+│       └── AchievementSeeder.php (20 conquistas)
 │
 └── routes/
     ├── web.php
-    └── api.php
+    ├── auth.php
+    ├── student.php
+    └── admin.php
 ```
 
 ## 2. Tabelas do Banco de Dados
@@ -265,74 +249,95 @@ user_achievements
 
 ## 3. Rotas Principais
 
-### API Routes (api.php)
+### Student Routes (routes/student.php - usando Inertia)
 ```
-POST   /api/auth/login
-POST   /api/auth/register
-POST   /api/auth/logout
-POST   /api/auth/password/reset
+Middleware: ['auth', 'student']
+Prefix: /app
+Name: student.
 
-GET    /api/student/dashboard
-GET    /api/student/quizzes
-GET    /api/student/quizzes/{id}
-POST   /api/student/quizzes/{id}/start
-POST   /api/student/quizzes/attempts/{id}/submit
-GET    /api/student/ranking
-GET    /api/student/profile
-PUT    /api/student/profile
-
-GET    /api/admin/dashboard
-GET    /api/admin/students
-GET    /api/admin/students/{id}
-PUT    /api/admin/students/{id}
-DELETE /api/admin/students/{id}
-GET    /api/admin/quizzes
-POST   /api/admin/quizzes
-PUT    /api/admin/quizzes/{id}
-DELETE /api/admin/quizzes/{id}
-GET    /api/admin/perguntas
-POST   /api/admin/perguntas
-PUT    /api/admin/perguntas/{id}
-DELETE /api/admin/perguntas/{id}
-GET    /api/admin/reports
+GET    /app/dashboard                                  -> DashboardController@index
+GET    /app/playQuiz                                   -> QuizController@index
+GET    /app/myQuiz                                     -> QuizController@meusQuizzes
+POST   /app/quiz/{quiz}/start                          -> QuizController@start
+POST   /app/quiz/attempts/{attempt}/answer             -> QuizController@answer
+POST   /app/quiz/attempts/{attempt}/finish             -> QuizController@finish
+GET    /app/ranking                                    -> RankingController@index
+GET    /app/ranking/data                               -> RankingController@getRanking
+GET    /app/profile                                    -> ProfileController@index
+GET    /app/profile/progress                           -> ProfileController@getProgress
+GET    /app/profile/achievements                       -> ProfileController@getAchievements
+GET    /app/profile/recommendations                    -> ProfileController@getRecommendations
 ```
 
-### Web Routes (web.php - usando Inertia)
+### Admin Routes (routes/admin.php - usando Inertia)
 ```
-GET    /
-GET    /login
+Middleware: ['auth', 'admin']
+Prefix: /backoffice
+Name: admin.
+
+GET    /backoffice/dashboard                           -> DashboardController@index
+
+# Students Management
+GET    /backoffice/students                            -> StudentController@index
+GET    /backoffice/students/{student}                  -> StudentController@show
+PUT    /backoffice/students/{student}                  -> StudentController@update
+DELETE /backoffice/students/{student}                  -> StudentController@destroy
+GET    /backoffice/students-statistics                 -> StudentController@statistics
+
+# Quizzes Management
+GET    /backoffice/quizzes                             -> QuizController@index
+GET    /backoffice/quizzes/create                      -> QuizController@create
+POST   /backoffice/quizzes                             -> QuizController@store
+GET    /backoffice/quizzes/{quiz}                      -> QuizController@show
+GET    /backoffice/quizzes/{quiz}/edit                 -> QuizController@edit
+PUT    /backoffice/quizzes/{quiz}                      -> QuizController@update
+DELETE /backoffice/quizzes/{quiz}                      -> QuizController@destroy
+POST   /backoffice/quizzes/{quiz}/toggle-active        -> QuizController@toggleActive
+POST   /backoffice/quizzes/{quiz}/duplicate            -> QuizController@duplicate
+
+# Perguntas Management
+GET    /backoffice/perguntas                           -> PerguntaController@index
+GET    /backoffice/perguntas/create                    -> PerguntaController@create
+POST   /backoffice/perguntas                           -> PerguntaController@store
+GET    /backoffice/perguntas/{pergunta}                -> PerguntaController@show
+GET    /backoffice/perguntas/{pergunta}/edit           -> PerguntaController@edit
+PUT    /backoffice/perguntas/{pergunta}                -> PerguntaController@update
+DELETE /backoffice/perguntas/{pergunta}                -> PerguntaController@destroy
+GET    /backoffice/perguntas-statistics                -> PerguntaController@statistics
+
+# Reports
+GET    /backoffice/reports                             -> ReportController@index
+GET    /backoffice/reports/overview                    -> ReportController@overview
+GET    /backoffice/reports/students                    -> ReportController@students
+GET    /backoffice/reports/quizzes                     -> ReportController@quizzes
+GET    /backoffice/reports/performance                 -> ReportController@performanceByCategory
+GET    /backoffice/reports/engagement                  -> ReportController@engagement
+GET    /backoffice/reports/export                      -> ReportController@export
+```
+
+### Auth Routes (routes/auth.php - usando Inertia)
+```
+GET    /login                                          -> Auth\AuthenticatedSessionController
 POST   /login
-GET    /cadastro
+GET    /cadastro                                       -> Auth\RegisteredUserController
 POST   /cadastro
-
-GET    /aluno/dashboard
-GET    /aluno/quizzes
-GET    /aluno/quizzes/{id}
-GET    /aluno/ranking
-GET    /aluno/perfil
-
-GET    /admin/dashboard
-GET    /admin/alunos
-GET    /admin/quizzes
-GET    /admin/perguntas
-GET    /admin/relatorios
+POST   /logout
+GET    /                                               -> Redirect para /app ou /backoffice
 ```
 
 ## 4. Fluxo de Dados
 ```
-React Frontend (Vite)
-      ↕️ (Axios/Fetch)
-Laravel API Routes
+React Frontend (Vite + Inertia.js)
+      ↕️
+Laravel Routes (Inertia)
       ↕️
 Controllers
       ↕️
 Services (Business Logic)
       ↕️
-Repositories
-      ↕️
 Models (Eloquent ORM)
       ↕️
-MySQL Database
+MySQL Database (Railway)
 
 | #   | Categoria                             | Perguntas | %   |
 |-----|---------------------------------------|-----------|-----|
