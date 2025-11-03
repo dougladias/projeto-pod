@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { router } from '@inertiajs/react';
 import '../../../css/loading.css';
-import LogoQuiz from '@/assets/LogoQuiz.svg';
+import LogoQuiz from '@/assets/LogoQuiz.webp';
 
 // Lista de rotas onde o loading NÃO deve aparecer
 const EXCLUDED_ROUTES = [
@@ -58,7 +58,7 @@ export function GlobalLoading() {
                     {/* Logo Quiz no centro com pulso */}
                     <div className="flex h-24 w-24 items-center justify-center">
                         <div className="animate-pulse-scale">
-                            <img src={LogoQuiz} alt="Quiz Logo" className="h-16 w-16" />
+                            <img src={LogoQuiz} alt="Quiz Logo" className="h-10 w-auto" />
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import LogoQuiz from '@/assets/LogoQuiz.svg';
+import LogoQuiz from '@/assets/LogoQuiz.webp';
 
 export function LoginHeader() {
     return (

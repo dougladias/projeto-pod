@@ -1,6 +1,6 @@
-import cenarioLogin from '@/assets/cenarioLogin.svg';
-import LogoQuiz from '@/assets/LogoQuiz.svg';
-import avatarM from '@/assets/avatarM.svg';
+import cenarioLogin from '@/assets/cenarioLogin.webp';
+import LogoQuiz from '@/assets/LogoQuiz.webp';
+import avatarM from '@/assets/avatarM.webp';
 
 export function LoginBanner() {
     return (

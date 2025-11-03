@@ -3,9 +3,9 @@ import { PropsWithChildren, useState } from 'react';
 import { BookOpen, User, Menu, X, LogOut, Play } from 'lucide-react';
 
 // Import avatars
-import NikoAvatar from '@/assets/Niko.svg';
-import TinaAvatar from '@/assets/Tina.svg';
-import AvatarM from '@/assets/avatarM.svg';
+import NikoAvatar from '@/assets/Niko.webp';
+import TinaAvatar from '@/assets/Tina.webp';
+import AvatarM from '@/assets/avatarM.webp';
 
 export default function StudentLayout({ children }: PropsWithChildren) {
     const [sidebarOpen, setSidebarOpen] = useState(true);

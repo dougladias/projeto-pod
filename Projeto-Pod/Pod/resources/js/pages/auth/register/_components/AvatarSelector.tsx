@@ -1,7 +1,7 @@
 import { Label } from '@/components/ui/label';
 import InputError from '@/components/common/input-error';
-import NikoAvatar from '@/assets/Niko.svg';
-import TinaAvatar from '@/assets/Tina.svg';
+import NikoAvatar from '@/assets/Niko.webp';
+import TinaAvatar from '@/assets/Tina.webp';
 
 const AVATARS = [
     { id: 'niko', src: NikoAvatar, alt: 'Niko' },

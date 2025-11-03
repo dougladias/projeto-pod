@@ -1,4 +1,4 @@
-import LogoQuiz from '@/assets/LogoQuiz.svg';
+import LogoQuiz from '@/assets/LogoQuiz.webp';
 import TextLink from '@/components/common/text-link';
 import { login } from '@/routes';
 
