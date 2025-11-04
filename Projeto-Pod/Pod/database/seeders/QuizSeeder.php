@@ -12,87 +12,79 @@ class QuizSeeder extends Seeder
      */
     public function run(): void
     {
-        // Criar quizzes temáticos usando as perguntas do banco
+        // Criar quizzes organizados por níveis (do menor para o maior número de perguntas)
         $quizzes = [
+            // NÍVEL 1 - Efeitos Cardiovasculares e Sistêmicos (13 perguntas - 13%)
             [
-                'title' => 'Quiz Missão - Caça Vape: Básico',
-                'description' => 'Teste seus conhecimentos básicos sobre os malefícios do vape. Quiz ideal para iniciantes!',
-                'theme' => 'Introdução aos malefícios do vape',
+                'title' => 'Nível 1 - Efeitos Cardiovasculares e Sistêmicos',
+                'description' => 'Descubra como o vape afeta seu coração e sistema circulatório. Nível inicial com 13 perguntas.',
+                'theme' => 'Saúde cardiovascular',
                 'difficulty' => 'facil',
-                'points_reward' => 100,
+                'points_reward' => 130,
                 'time_limit_minutes' => 15,
                 'is_active' => true,
                 'order' => 1,
+                'categoria' => 'Efeitos Cardiovasculares e Sistêmicos',
             ],
+            // NÍVEL 2 - Composição e Substâncias Químicas (15 perguntas - 15%)
             [
-                'title' => 'Composição e Substâncias Químicas',
-                'description' => 'Descubra o que realmente há dentro dos vapes e cigarros eletrônicos.',
+                'title' => 'Nível 2 - Composição e Substâncias Químicas',
+                'description' => 'Descubra o que realmente há dentro dos vapes e cigarros eletrônicos. 15 perguntas sobre química.',
                 'theme' => 'Química e composição',
-                'difficulty' => 'medio',
+                'difficulty' => 'facil',
                 'points_reward' => 150,
-                'time_limit_minutes' => 20,
+                'time_limit_minutes' => 18,
                 'is_active' => true,
                 'order' => 2,
+                'categoria' => 'Composição e Substâncias Químicas',
             ],
+            // NÍVEL 3 - Dependência e Nicotina (17 perguntas - 17%)
             [
-                'title' => 'Dependência e Nicotina',
-                'description' => 'Entenda como a nicotina causa dependência e afeta seu corpo.',
+                'title' => 'Nível 3 - Dependência e Nicotina',
+                'description' => 'Entenda como a nicotina causa dependência e afeta seu corpo. 17 perguntas sobre vícios.',
                 'theme' => 'Vícios e dependência',
                 'difficulty' => 'medio',
-                'points_reward' => 150,
+                'points_reward' => 170,
                 'time_limit_minutes' => 20,
                 'is_active' => true,
                 'order' => 3,
+                'categoria' => 'Dependência e Nicotina',
             ],
+            // NÍVEL 4 - Efeitos Respiratórios e Pulmonares (17 perguntas - 17%)
             [
-                'title' => 'Efeitos Respiratórios e Pulmonares',
-                'description' => 'Aprenda sobre os danos que o vape causa ao sistema respiratório.',
+                'title' => 'Nível 4 - Efeitos Respiratórios e Pulmonares',
+                'description' => 'Aprenda sobre os danos que o vape causa ao sistema respiratório. 17 perguntas sobre saúde pulmonar.',
                 'theme' => 'Saúde respiratória',
                 'difficulty' => 'medio',
-                'points_reward' => 150,
+                'points_reward' => 170,
                 'time_limit_minutes' => 20,
                 'is_active' => true,
                 'order' => 4,
+                'categoria' => 'Efeitos Respiratórios e Pulmonares',
             ],
+            // NÍVEL 5 - Riscos para Grupos Vulneráveis (17 perguntas - 17%)
             [
-                'title' => 'Efeitos Cardiovasculares e Sistêmicos',
-                'description' => 'Descubra como o vape afeta seu coração e sistema circulatório.',
-                'theme' => 'Saúde cardiovascular',
-                'difficulty' => 'dificil',
-                'points_reward' => 200,
-                'time_limit_minutes' => 25,
-                'is_active' => true,
-                'order' => 5,
-            ],
-            [
-                'title' => 'Riscos para Grupos Vulneráveis',
-                'description' => 'Conheça os perigos especiais do vape para adolescentes, gestantes e crianças.',
+                'title' => 'Nível 5 - Riscos para Grupos Vulneráveis',
+                'description' => 'Conheça os perigos especiais do vape para adolescentes, gestantes e crianças. 17 perguntas sobre grupos de risco.',
                 'theme' => 'Grupos de risco',
                 'difficulty' => 'dificil',
-                'points_reward' => 200,
+                'points_reward' => 170,
+                'time_limit_minutes' => 22,
+                'is_active' => true,
+                'order' => 5,
+                'categoria' => 'Riscos para Grupos Vulneráveis',
+            ],
+            // NÍVEL 6 - Aspectos Legais, Sociais e Prevenção (21 perguntas - 21%)
+            [
+                'title' => 'Nível 6 - Aspectos Legais, Sociais e Prevenção',
+                'description' => 'Entenda as leis, regulamentações e formas de prevenção do uso de vapes. Nível final com 21 perguntas!',
+                'theme' => 'Legislação e sociedade',
+                'difficulty' => 'dificil',
+                'points_reward' => 210,
                 'time_limit_minutes' => 25,
                 'is_active' => true,
                 'order' => 6,
-            ],
-            [
-                'title' => 'Aspectos Legais, Sociais e Prevenção',
-                'description' => 'Entenda as leis, regulamentações e formas de prevenção do uso de vapes.',
-                'theme' => 'Legislação e sociedade',
-                'difficulty' => 'dificil',
-                'points_reward' => 200,
-                'time_limit_minutes' => 25,
-                'is_active' => true,
-                'order' => 7,
-            ],
-            [
-                'title' => 'Desafio Completo - Caça Vape',
-                'description' => 'Quiz completo com perguntas de todas as categorias. Teste todos os seus conhecimentos!',
-                'theme' => 'Quiz completo',
-                'difficulty' => 'dificil',
-                'points_reward' => 300,
-                'time_limit_minutes' => 30,
-                'is_active' => true,
-                'order' => 8,
+                'categoria' => 'Aspectos Legais, Sociais e Prevenção',
             ],
         ];
 
@@ -116,80 +108,26 @@ class QuizSeeder extends Seeder
     }
 
     /**
-     * Associa perguntas específicas a cada quiz.
+     * Associa perguntas específicas a cada quiz baseado no nível.
      */
     private function associarPerguntas(int $quizId, int $quizOrder): void
     {
-        $perguntasData = [];
-
-        switch ($quizOrder) {
-            case 1: // Quiz Básico - Mix de todas categorias (perguntas mais fáceis)
-                $perguntas = DB::table('perguntas')
-                    ->whereIn('id_pergunta', [1, 2, 3, 11, 21, 31, 41, 51, 61, 71, 81, 91])
-                    ->get();
-                break;
-
-            case 2: // Composição e Substâncias Químicas
-                $perguntas = DB::table('perguntas')
-                    ->where('categoria', 'Composição e Substâncias Químicas')
-                    ->limit(15)
-                    ->get();
-                break;
-
-            case 3: // Dependência e Nicotina
-                $perguntas = DB::table('perguntas')
-                    ->where('categoria', 'Dependência e Nicotina')
-                    ->limit(17)
-                    ->get();
-                break;
-
-            case 4: // Efeitos Respiratórios e Pulmonares
-                $perguntas = DB::table('perguntas')
-                    ->where('categoria', 'Efeitos Respiratórios e Pulmonares')
-                    ->limit(17)
-                    ->get();
-                break;
-
-            case 5: // Efeitos Cardiovasculares e Sistêmicos
-                $perguntas = DB::table('perguntas')
-                    ->where('categoria', 'Efeitos Cardiovasculares e Sistêmicos')
-                    ->limit(13)
-                    ->get();
-                break;
-
-            case 6: // Riscos para Grupos Vulneráveis
-                $perguntas = DB::table('perguntas')
-                    ->where('categoria', 'Riscos para Grupos Vulneráveis')
-                    ->limit(17)
-                    ->get();
-                break;
-
-            case 7: // Aspectos Legais, Sociais e Prevenção
-                $perguntas = DB::table('perguntas')
-                    ->where('categoria', 'Aspectos Legais, Sociais e Prevenção')
-                    ->limit(21)
-                    ->get();
-                break;
-
-            case 8: // Desafio Completo - 20 perguntas aleatórias de todas categorias
-                $perguntas = DB::table('perguntas')
-                    ->inRandomOrder()
-                    ->limit(20)
-                    ->get();
-                break;
-
-            default:
-                $perguntas = collect();
-        }
-
-        // Calcular pontos por pergunta baseado na dificuldade
-        $pointsPerQuestion = match ($quizOrder) {
-            1 => 10,  // Básico
-            2, 3, 4 => 12,  // Médio
-            5, 6, 7 => 15,  // Difícil
-            8 => 20,  // Desafio completo
-            default => 10,
+        // Mapear níveis para categorias e quantidade de perguntas
+        $nivelConfig = match ($quizOrder) {
+            1 => ['categoria' => 'Efeitos Cardiovasculares e Sistêmicos', 'total' => 13, 'pontos' => 10],
+            2 => ['categoria' => 'Composição e Substâncias Químicas', 'total' => 15, 'pontos' => 10],
+            3 => ['categoria' => 'Dependência e Nicotina', 'total' => 17, 'pontos' => 10],
+            4 => ['categoria' => 'Efeitos Respiratórios e Pulmonares', 'total' => 17, 'pontos' => 10],
+            5 => ['categoria' => 'Riscos para Grupos Vulneráveis', 'total' => 17, 'pontos' => 10],
+            6 => ['categoria' => 'Aspectos Legais, Sociais e Prevenção', 'total' => 21, 'pontos' => 10],
+            default => ['categoria' => '', 'total' => 0, 'pontos' => 10],
         };
+
+        // Buscar todas as perguntas da categoria do nível
+        $perguntas = DB::table('perguntas')
+            ->where('categoria', $nivelConfig['categoria'])
+            ->limit($nivelConfig['total'])
+            ->get();
 
         // Inserir perguntas na tabela pivot
         $order = 1;
@@ -198,7 +136,7 @@ class QuizSeeder extends Seeder
                 'quiz_id' => $quizId,
                 'pergunta_id' => $pergunta->id_pergunta,
                 'order' => $order++,
-                'points' => $pointsPerQuestion,
+                'points' => $nivelConfig['pontos'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

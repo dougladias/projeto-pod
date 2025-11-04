@@ -164,7 +164,7 @@ class QuizController extends Controller
             'time_spent_seconds' => 0,
         ]);
 
-        return Inertia::render('student/playQuiz/quiz', [
+        return Inertia::render('student/quiz/index', [
             'attempt_id' => $attempt->id,
             'quiz' => [
                 'id' => $quiz->id,
