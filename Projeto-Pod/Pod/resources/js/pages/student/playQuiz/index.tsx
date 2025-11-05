@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import StudentLayout from '@/layouts/student/student-layout';
+import { Link } from '@inertiajs/react';
 import { useQuizActions } from '@/hooks/useQuizActions';
-import { Clock, BookOpen, Trophy } from 'lucide-react';
+import { Clock, BookOpen, Trophy, ArrowLeft } from 'lucide-react';
 
 // Importar imagens
-import cenarioBackground from '@/assets/cenarioLogin.webp';
-import titleImage from '@/assets/playQuiz.webp';
+import playQuizBackground from '@/assets/playQuiz.webp';
+import logoPlayQuiz from '@/assets/LogoPlayQuiz.webp';
 import nivel1Image from '@/assets/nivel_1.webp';
 import nivel2Image from '@/assets/nivel_2.webp';
 import nivel3Image from '@/assets/nivel_3.webp';
@@ -35,12 +35,12 @@ const nivelImages = [nivel1Image, nivel2Image, nivel3Image, nivel4Image, nivel5I
 
 // Posições dos níveis no mapa (ajuste conforme necessário)
 const nivelPositions = [
-    { top: '15%', left: '10%' },  // Nível 1
-    { top: '30%', left: '60%' },  // Nível 2
-    { top: '45%', left: '15%' },  // Nível 3
-    { top: '60%', left: '65%' },  // Nível 4
-    { top: '75%', left: '20%' },  // Nível 5
-    { top: '88%', left: '55%' },  // Nível 6
+    { top: '25%', left: '58%' },  // Nível 1
+    { top: '27%', left: '34%' },  // Nível 2
+    { top: '50%', left: '56%' },  // Nível 3
+    { top: '65%', left: '30%' },  // Nível 4
+    { top: '85%', left: '48%' },  // Nível 5
+    { top: '70%', left: '76%' },  // Nível 6
 ];
 
 export default function QuizzesIndex({ quizzes }: Props) {
@@ -52,84 +52,47 @@ export default function QuizzesIndex({ quizzes }: Props) {
     };
 
     return (
-        <StudentLayout>
-            <div className="relative w-full h-[calc(100vh-4rem)] overflow-hidden">
-                {/* Background com imagem */}
-                <div
-                    className="absolute inset-0 w-full h-full"
-                    style={{
-                        backgroundImage: `url(${cenarioBackground})`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat',
-                    }}
-                >
-                {/* Título no topo */}
-                <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
-                    <img
-                        src={titleImage}
-                        alt="Quiz Missão Caça Vape"
-                        className="h-16 md:h-20 object-contain drop-shadow-2xl"
-                    />
-                </div>
+        <div className="relative w-screen h-screen overflow-x-hidden bg-gradient-to-b from-sky-400 to-green-400">
+            {/* Background com imagem - sem zoom, imagem completa */}
+            <img
+                src={playQuizBackground}
+                alt="Play Quiz Background"
+                className="absolute inset-0 w-full h-full object-fill"
+                style={{ zIndex: 1 }}
+            />
 
-                {/* Linhas conectando os níveis - caminho sinuoso com SVG */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 5 }} preserveAspectRatio="none">
-                    <defs>
-                        <linearGradient id="pathGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style={{ stopColor: '#FFF9E6', stopOpacity: 0.9 }} />
-                            <stop offset="50%" style={{ stopColor: '#FFE55C', stopOpacity: 0.9 }} />
-                            <stop offset="100%" style={{ stopColor: '#FFF9E6', stopOpacity: 0.9 }} />
-                        </linearGradient>
-                        <filter id="pathShadow">
-                            <feDropShadow dx="0" dy="2" stdDeviation="3" floodOpacity="0.3"/>
-                        </filter>
-                    </defs>
+            {/* Overlay azul igual na tela de login */}
+            <div className="absolute inset-0 bg-blue-600/[0.35]" style={{ zIndex: 2 }}></div>
 
-                    {/* Caminho contínuo conectando todos os níveis */}
-                    <path
-                        d="M 10,15
-                           C 20,17 50,22 60,30
-                           S 40,40 15,45
-                           S 30,55 65,60
-                           S 45,68 20,75
-                           S 35,82 55,88"
-                        stroke="url(#pathGradient)"
-                        strokeWidth="14"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        filter="url(#pathShadow)"
-                        style={{
-                            vectorEffect: 'non-scaling-stroke'
-                        }}
-                    />
+            {/* Botão Voltar */}
+            <Link
+                href="/app/myQuiz"
+                className="absolute top-4 left-4 flex items-center gap-2 text-white px-3 py-2 lg:px-4 lg:py-2 rounded-lg shadow-lg transition-all hover:opacity-90 text-xs lg:text-base"
+                style={{ backgroundColor: '#091ABC', zIndex: 50 }}
+            >
+                <ArrowLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+                <span className="font-semibold">Meus Quizzes</span>
+            </Link>
 
-                    {/* Borda branca para dar destaque */}
-                    <path
-                        d="M 10,15
-                           C 20,17 50,22 60,30
-                           S 40,40 15,45
-                           S 30,55 65,60
-                           S 45,68 20,75
-                           S 35,82 55,88"
-                        stroke="rgba(255, 255, 255, 0.4)"
-                        strokeWidth="18"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        style={{
-                            vectorEffect: 'non-scaling-stroke'
-                        }}
-                    />
-                </svg>
+            {/* Logo PlayQuiz Centralizada */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 z-20 -top-32">
+                <img
+                    src={logoPlayQuiz}
+                    alt="Logo PlayQuiz"
+                    className="w-[400px] h-auto lg:w-[600px] xl:w-[800px] drop-shadow-2xl"
+                />
+            </div>
 
-                {/* Mapa de níveis */}
-                <div className="relative w-full h-full" style={{ zIndex: 10 }}>
+            {/* Mapa de níveis */}
+            <div className="absolute inset-0 w-full h-full" style={{ zIndex: 30 }}>
                     {quizzes.map((quiz, index) => {
                         const nivelNumber = index + 1;
                         const position = nivelPositions[index];
                         const isHovered = hoveredNivel === nivelNumber;
+
+                        // Verifica se o nível está desbloqueado
+                        const isUnlocked = index === 0 || (quizzes[index - 1]?.is_completed ?? false);
+                        const isLocked = !isUnlocked;
 
                         return (
                             <div
@@ -141,17 +104,28 @@ export default function QuizzesIndex({ quizzes }: Props) {
                                 }}
                             >
                                 {/* Botão do nível */}
-                                <button
-                                    onClick={() => handleStartQuiz(quiz.id)}
+                                <div
+                                    onClick={() => !isLocked && handleStartQuiz(quiz.id)}
                                     onMouseEnter={() => setHoveredNivel(nivelNumber)}
                                     onMouseLeave={() => setHoveredNivel(null)}
-                                    className="relative transition-transform hover:scale-110 active:scale-95 cursor-pointer"
-                                    disabled={isLoading}
+                                    className={`relative transition-all duration-300 ${
+                                        isLocked
+                                            ? 'cursor-not-allowed opacity-50 grayscale'
+                                            : 'hover:scale-110 active:scale-95 cursor-pointer hover:drop-shadow-[0_0_20px_rgba(255,255,0,0.8)] hover:brightness-125'
+                                    } ${isLoading ? 'pointer-events-none' : ''}`}
                                 >
                                     <img
                                         src={nivelImages[index]}
                                         alt={`Nível ${nivelNumber}`}
-                                        className="w-24 h-24 md:w-32 md:h-32 object-contain drop-shadow-xl"
+                                        className={`object-contain drop-shadow-xl transition-all duration-300 ${
+                                            nivelNumber === 3
+                                                ? 'w-32 h-32 md:w-40 md:h-40'
+                                                : nivelNumber === 4
+                                                ? 'w-40 h-40 md:w-48 md:h-48'
+                                                : nivelNumber === 5
+                                                ? 'w-44 h-44 md:w-52 md:h-52'
+                                                : 'w-28 h-28 md:w-36 md:h-36'
+                                        }`}
                                     />
 
                                     {/* Badge de completado */}
@@ -160,15 +134,42 @@ export default function QuizzesIndex({ quizzes }: Props) {
                                             <Trophy className="w-4 h-4 text-yellow-900" />
                                         </div>
                                     )}
-                                </button>
+                                </div>
 
-                                {/* Balão de informações */}
-                                {isHovered && (
-                                    <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                                {/* Balão de informações para níveis desbloqueados */}
+                                {isHovered && !isLocked && (
+                                    <div className={`absolute z-50 animate-in fade-in duration-200 ${
+                                        nivelNumber === 2 || nivelNumber === 4
+                                            ? 'right-full top-1/2 transform -translate-y-1/2 mr-4'
+                                            : nivelNumber === 1 || nivelNumber === 3
+                                            ? 'left-full top-1/2 transform -translate-y-1/2 ml-4'
+                                            : nivelNumber === 5 || nivelNumber === 6
+                                            ? 'bottom-full left-1/2 transform -translate-x-1/2 mb-4'
+                                            : 'top-full left-1/2 transform -translate-x-1/2 mt-4'
+                                    }`}>
                                         <div className="bg-white rounded-xl shadow-2xl p-4 min-w-[280px] max-w-[320px] border-4 border-blue-400">
                                             {/* Seta do balão */}
-                                            <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-blue-400"></div>
-                                            <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-b-6 border-transparent border-b-white"></div>
+                                            {nivelNumber === 2 || nivelNumber === 4 ? (
+                                                <>
+                                                    <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-blue-400"></div>
+                                                    <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-6 border-b-6 border-l-6 border-transparent border-l-white"></div>
+                                                </>
+                                            ) : nivelNumber === 1 || nivelNumber === 3 ? (
+                                                <>
+                                                    <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-blue-400"></div>
+                                                    <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-6 border-b-6 border-r-6 border-transparent border-r-white"></div>
+                                                </>
+                                            ) : nivelNumber === 5 || nivelNumber === 6 ? (
+                                                <>
+                                                    <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-blue-400"></div>
+                                                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-white"></div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-blue-400"></div>
+                                                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-b-6 border-transparent border-b-white"></div>
+                                                </>
+                                            )}
 
                                             {/* Conteúdo */}
                                             <div className="space-y-3">
@@ -214,12 +215,63 @@ export default function QuizzesIndex({ quizzes }: Props) {
                                         </div>
                                     </div>
                                 )}
+
+                                {/* Balão de informações para níveis bloqueados */}
+                                {isHovered && isLocked && (
+                                    <div className={`absolute z-50 animate-in fade-in duration-200 ${
+                                        nivelNumber === 2 || nivelNumber === 4
+                                            ? 'right-full top-1/2 transform -translate-y-1/2 mr-4'
+                                            : nivelNumber === 1 || nivelNumber === 3
+                                            ? 'left-full top-1/2 transform -translate-y-1/2 ml-4'
+                                            : nivelNumber === 5 || nivelNumber === 6
+                                            ? 'bottom-full left-1/2 transform -translate-x-1/2 mb-4'
+                                            : 'top-full left-1/2 transform -translate-x-1/2 mt-4'
+                                    }`}>
+                                        <div className="bg-red-50 rounded-xl shadow-2xl p-4 min-w-[280px] max-w-[320px] border-4 border-red-400">
+                                            {/* Seta do balão */}
+                                            {nivelNumber === 2 || nivelNumber === 4 ? (
+                                                <>
+                                                    <div className="absolute -right-3 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-l-8 border-transparent border-l-red-400"></div>
+                                                    <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-6 border-b-6 border-l-6 border-transparent border-l-red-50"></div>
+                                                </>
+                                            ) : nivelNumber === 1 || nivelNumber === 3 ? (
+                                                <>
+                                                    <div className="absolute -left-3 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-red-400"></div>
+                                                    <div className="absolute -left-2 top-1/2 transform -translate-y-1/2 w-0 h-0 border-t-6 border-b-6 border-r-6 border-transparent border-r-red-50"></div>
+                                                </>
+                                            ) : nivelNumber === 5 || nivelNumber === 6 ? (
+                                                <>
+                                                    <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-transparent border-t-red-400"></div>
+                                                    <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-t-6 border-transparent border-t-red-50"></div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-red-400"></div>
+                                                    <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-6 border-r-6 border-b-6 border-transparent border-b-red-50"></div>
+                                                </>
+                                            )}
+
+                                            {/* Conteúdo */}
+                                            <div className="space-y-3">
+                                                <div className="flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                                    </svg>
+                                                    <h3 className="font-bold text-lg text-red-900 leading-tight">
+                                                        Nível Bloqueado
+                                                    </h3>
+                                                </div>
+                                                <p className="text-sm text-red-800">
+                                                    Complete o <span className="font-bold">Nível {nivelNumber - 1}</span> para desbloquear este nível.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}
-                </div>
             </div>
-            </div>
-        </StudentLayout>
+        </div>
     );
 }
