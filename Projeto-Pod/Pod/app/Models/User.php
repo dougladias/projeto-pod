@@ -38,6 +38,9 @@ class User extends Authenticatable
         'phone',
         'avatar',
         'role',
+        'city',
+        'vape_usage',
+        'bio',
     ];
 
     /**

@@ -79,7 +79,7 @@ index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     index.form = indexForm
 /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
 export const getRanking = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -94,7 +94,7 @@ getRanking.definition = {
 
 /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
 getRanking.url = (options?: RouteQueryOptions) => {
@@ -103,7 +103,7 @@ getRanking.url = (options?: RouteQueryOptions) => {
 
 /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
 getRanking.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -112,7 +112,7 @@ getRanking.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
 getRanking.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -122,7 +122,7 @@ getRanking.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
     /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
     const getRankingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -132,7 +132,7 @@ getRanking.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 
             /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
         getRankingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -141,7 +141,7 @@ getRanking.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
         })
             /**
 * @see \App\Http\Controllers\Student\RankingController::getRanking
- * @see app/Http/Controllers/Student/RankingController.php:65
+ * @see app/Http/Controllers/Student/RankingController.php:73
  * @route '/app/ranking/data'
  */
         getRankingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

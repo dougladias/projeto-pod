@@ -10,7 +10,7 @@ import { Toaster as Sonner, type ToasterProps } from "sonner"
 const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
-      theme="dark"
+      theme="light"
       className="toaster group"
       icons={{
         success: <CircleCheckIcon className="!size-4" />,
@@ -21,14 +21,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       toastOptions={{
         classNames: {
-          toast: "!bg-[#1a1a1a] !text-white !border !border-gray-800",
-          description: "!text-gray-400",
+          toast: "!bg-white !text-gray-900 !border !border-gray-200",
+          description: "!text-gray-600",
           actionButton: "!bg-blue-600 !text-white",
-          cancelButton: "!bg-gray-800 !text-gray-400",
-          error: "!border-red-600 !bg-red-950",
-          success: "!border-green-600 !bg-green-950",
-          warning: "!border-yellow-600 !bg-yellow-950",
-          info: "!border-blue-600 !bg-blue-950",
+          cancelButton: "!bg-gray-200 !text-gray-700",
+          error: "!border-red-400 !bg-red-50",
+          success: "!border-green-500 !bg-gradient-to-r !from-green-50 !to-emerald-50",
+          warning: "!border-yellow-400 !bg-yellow-50",
+          info: "!border-blue-400 !bg-blue-50",
         },
       }}
       {...props}

@@ -1,8 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { BookOpen } from 'lucide-react';
-import { router } from '@inertiajs/react';
 import type { RecentActivity } from '@/types/dashboard';
 
 // Props: lista de atividades recentes
@@ -43,19 +41,12 @@ export function RecentQuizzes({ activities }: Props) {
                             </Badge>
                         </div>
                     ))                    
-                ) : (                    
+                ) : (
                     <div className="text-center py-8 text-gray-500">
-                        
+
                         {/* Mensagem quando não há quizzes recentes */}
                         <BookOpen className="w-12 h-12 mx-auto mb-2 text-gray-400" />
                         <p className="text-sm">Nenhum quiz completado ainda</p>
-                        <Button
-                            onClick={() => router.visit('/app/playQuiz')}
-                            style={{ backgroundColor: '#091ABC' }}
-                            className="mt-4 hover:opacity-90 text-white"
-                        >
-                            Começar Agora
-                        </Button>
                     </div>
                 )}
             </div>

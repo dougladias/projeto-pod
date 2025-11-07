@@ -1,6 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react';
 import { PropsWithChildren, useState } from 'react';
-import { BookOpen, User, Menu, X, LogOut, Play } from 'lucide-react';
+import { BookOpen, User, Menu, X, LogOut, Play, UserCircle, LayoutDashboard, Trophy, Crown } from 'lucide-react';
 
 // Import avatars
 import NikoAvatar from '@/assets/Niko.webp';
@@ -9,10 +9,11 @@ import AvatarM from '@/assets/avatarM.webp';
 
 export default function StudentLayout({ children }: PropsWithChildren) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
-    const { url, props } = usePage<{ auth: { user: { name: string; avatar?: string } } }>();
+    const { url, props } = usePage<{ auth: { user: { name: string; avatar?: string; total_completed_quizzes?: number } } }>();
 
     const user = props.auth?.user;
     const firstName = user?.name?.split(' ')[0] || 'Usuário';
+    const userLevel = Math.min(user?.total_completed_quizzes || 0, 6);
 
     // Map avatar name to imported asset
     const getAvatarSrc = (avatarName?: string) => {
@@ -34,7 +35,9 @@ export default function StudentLayout({ children }: PropsWithChildren) {
     const avatarSrc = getAvatarSrc(user?.avatar);
 
     const menuItems = [
-        { name: 'Dashboard', icon: BookOpen, href: '/app/dashboard' },
+        { name: 'Dashboard', icon: LayoutDashboard, href: '/app/dashboard' },
+        { name: 'Meu Perfil', icon: UserCircle, href: '/settings/profile' },
+        { name: 'Ranking', icon: Trophy, href: '/app/ranking' },
         { name: 'Jogar Quiz', icon: Play, href: '/app/playQuiz' },
         { name: 'Meus Quizzes', icon: BookOpen, href: '/app/myQuiz' },
     ];
@@ -53,10 +56,10 @@ export default function StudentLayout({ children }: PropsWithChildren) {
             <aside
                 className={`${
                     sidebarOpen ? 'w-72' : 'w-20'
-                } bg-white text-gray-800 transition-all duration-300 ease-in-out flex flex-col shadow-lg h-screen sticky top-0 overflow-y-auto`}
+                } bg-white text-gray-800 transition-all duration-300 ease-in-out flex flex-col shadow-lg h-screen sticky top-0 overflow-y-auto overflow-x-hidden`}
             >
                 {/* Header with User Profile */}
-                <div className={`p-6 border-b border-gray-200 ${!sidebarOpen ? 'flex justify-center' : ''}`}>
+                <div className={`p-6 ${!sidebarOpen ? 'flex justify-center' : ''}`}>
                     {sidebarOpen ? (
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3 min-w-0">
@@ -73,7 +76,10 @@ export default function StudentLayout({ children }: PropsWithChildren) {
                                 )}
                                 <div className="transition-opacity duration-300 min-w-0">
                                     <h1 className="text-base font-bold text-gray-900 leading-tight whitespace-nowrap">Olá, {firstName}</h1>
-                                    <p className="text-xs text-blue-600 whitespace-nowrap">Nível 5</p>
+                                    <p className="text-xs text-black whitespace-nowrap flex items-center gap-1">
+                                        <Crown className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                                        Nível {userLevel}
+                                    </p>
                                 </div>
                             </div>
                             <button
@@ -88,10 +94,13 @@ export default function StudentLayout({ children }: PropsWithChildren) {
                             onClick={() => setSidebarOpen(!sidebarOpen)}
                             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                         >
-                            <Menu size={20} className="text-gray-600" />
+                            <Menu size={20} className="text-black" />
                         </button>
                     )}
                 </div>
+
+                {/* Separator */}
+                <div className="border-t mx-6" style={{ borderColor: '#BECFFF' }}></div>
 
                 {/* Menu Principal */}
                 <div className="flex-1 py-4">
@@ -110,15 +119,17 @@ export default function StudentLayout({ children }: PropsWithChildren) {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className={`flex items-center ${sidebarOpen ? 'gap-3 px-3 py-2.5' : 'justify-center py-2.5 px-2'} rounded-lg transition-all duration-300 group ${
+                                    className={`flex items-center rounded-lg transition-all duration-300 group ${
+                                        sidebarOpen ? 'gap-3 px-3 py-2.5' : 'justify-center py-2.5 px-2'
+                                    } ${
                                         active
                                             ? 'bg-blue-600 text-white shadow-md'
-                                            : 'text-blue-600 hover:bg-blue-50'
-                                    }`}
+                                            : 'hover:bg-blue-50'
+                                    } ${!sidebarOpen && active ? 'w-12 mx-auto' : ''}`}
                                     title={!sidebarOpen ? item.name : undefined}
                                 >
-                                    <Icon className="w-5 h-5 flex-shrink-0" />
-                                    <span className={`font-medium text-sm transition-all duration-300 whitespace-nowrap ${sidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'}`}>
+                                    <Icon className={`w-5 h-5 flex-shrink-0 ${!sidebarOpen ? 'mx-auto' : ''}`} style={active ? {} : { color: '#091ABC' }} />
+                                    <span className={`font-medium text-sm transition-opacity duration-300 whitespace-nowrap ${sidebarOpen ? 'opacity-100' : 'opacity-0 absolute'} ${active ? 'text-white' : 'text-black'}`}>
                                         {item.name}
                                     </span>
                                 </Link>
@@ -129,17 +140,17 @@ export default function StudentLayout({ children }: PropsWithChildren) {
 
                 {/* Logout Button */}
                 <div className="mt-auto">
-                    <div className="border-t border-gray-200 mb-6"></div>
+                    <div className="border-t mb-1 mx-6 mt-16" style={{ borderColor: '#BECFFF' }}></div>
                     <div className="p-6">
                         <button
                             onClick={handleLogout}
-                            className={`text-blue-600 hover:bg-blue-50 font-semibold rounded-lg transition-all duration-300 flex items-center ${
+                            className={`hover:bg-blue-50 font-semibold rounded-lg transition-all duration-300 flex items-center cursor-pointer ${
                                 sidebarOpen ? 'gap-2 py-3 px-3 w-full' : 'justify-center py-3 px-2'
                             }`}
                             title={!sidebarOpen ? 'Sair' : undefined}
                         >
-                            <LogOut className="w-5 h-5 flex-shrink-0" />
-                            <span className={`text-sm transition-all duration-300 whitespace-nowrap ${sidebarOpen ? 'opacity-100 w-auto' : 'opacity-0 w-0 overflow-hidden'}`}>
+                            <LogOut className={`w-5 h-5 flex-shrink-0 ${!sidebarOpen ? 'mx-auto' : ''}`} style={{ color: '#091ABC' }} />
+                            <span className={`text-sm transition-opacity duration-300 whitespace-nowrap ${sidebarOpen ? 'opacity-100' : 'opacity-0 absolute'} text-black`}>
                                 Sair
                             </span>
                         </button>

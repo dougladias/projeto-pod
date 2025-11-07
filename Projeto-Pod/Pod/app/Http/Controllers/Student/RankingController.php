@@ -56,6 +56,14 @@ class RankingController extends Controller
                 'school' => 'Minha Escola',
                 'year' => 'Meu Ano',
             ],
+            'current_user' => [
+                'name' => $user->name,
+                'avatar' => $user->avatar,
+                'total_points' => $user->total_points,
+                'total_completed_quizzes' => $user->total_completed_quizzes,
+                'average_accuracy' => $user->average_accuracy,
+                'ranking_position' => $user->ranking_position,
+            ],
         ]);
     }
 

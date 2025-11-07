@@ -21,8 +21,8 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // Calcula nível baseado em pontos (a cada 500 pontos = 1 nível)
-        $level = floor($user->total_points / 500) + 1;
+        // Calcula nível baseado em quizzes completados (1 quiz = 1 nível, máximo 6)
+        $level = min($user->total_completed_quizzes, 6);
 
         // Calcula streak (dias consecutivos) - últimos 7 dias
         $streak = $this->calculateStreak($user);

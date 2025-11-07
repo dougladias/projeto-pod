@@ -17,8 +17,25 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('settings/profile', [
+        $user = $request->user();
+
+        return Inertia::render('student/profile/index', [
             'status' => $request->session()->get('status'),
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'birth_date' => $user->birth_date?->format('Y-m-d'),
+                'phone' => $user->phone,
+                'city' => $user->city,
+                'vape_usage' => $user->vape_usage,
+                'bio' => $user->bio,
+                'avatar' => $user->avatar,
+                'total_points' => $user->total_points,
+                'total_completed_quizzes' => $user->total_completed_quizzes,
+                'average_accuracy' => $user->average_accuracy,
+                'ranking_position' => $user->ranking_position,
+                'total_achievements' => $user->achievements()->count(),
+            ],
         ]);
     }
 
@@ -27,8 +44,9 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validated = $request->validated();
 
+        $request->user()->fill($validated);
         $request->user()->save();
 
         return to_route('profile.edit');
