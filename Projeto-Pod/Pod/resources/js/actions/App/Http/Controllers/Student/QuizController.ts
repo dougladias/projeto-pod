@@ -160,15 +160,15 @@ meusQuizzes.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
  * @see app/Http/Controllers/Student/QuizController.php:125
  * @route '/app/quiz/{quiz}/start'
  */
-export const start = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
+export const start = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     url: start.url(args, options),
-    method: 'post',
+    method: 'get',
 })
 
 start.definition = {
-    methods: ["post"],
+    methods: ["get","post","head"],
     url: '/app/quiz/{quiz}/start',
-} satisfies RouteDefinition<["post"]>
+} satisfies RouteDefinition<["get","post","head"]>
 
 /**
 * @see \App\Http\Controllers\Student\QuizController::start
@@ -208,9 +208,27 @@ start.url = (args: { quiz: number | { id: number } } | [quiz: number | { id: num
  * @see app/Http/Controllers/Student/QuizController.php:125
  * @route '/app/quiz/{quiz}/start'
  */
+start.get = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: start.url(args, options),
+    method: 'get',
+})
+/**
+* @see \App\Http\Controllers\Student\QuizController::start
+ * @see app/Http/Controllers/Student/QuizController.php:125
+ * @route '/app/quiz/{quiz}/start'
+ */
 start.post = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     url: start.url(args, options),
     method: 'post',
+})
+/**
+* @see \App\Http\Controllers\Student\QuizController::start
+ * @see app/Http/Controllers/Student/QuizController.php:125
+ * @route '/app/quiz/{quiz}/start'
+ */
+start.head = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: start.url(args, options),
+    method: 'head',
 })
 
     /**
@@ -218,11 +236,20 @@ start.post = (args: { quiz: number | { id: number } } | [quiz: number | { id: nu
  * @see app/Http/Controllers/Student/QuizController.php:125
  * @route '/app/quiz/{quiz}/start'
  */
-    const startForm = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+    const startForm = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
         action: start.url(args, options),
-        method: 'post',
+        method: 'get',
     })
 
+            /**
+* @see \App\Http\Controllers\Student\QuizController::start
+ * @see app/Http/Controllers/Student/QuizController.php:125
+ * @route '/app/quiz/{quiz}/start'
+ */
+        startForm.get = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: start.url(args, options),
+            method: 'get',
+        })
             /**
 * @see \App\Http\Controllers\Student\QuizController::start
  * @see app/Http/Controllers/Student/QuizController.php:125
@@ -231,6 +258,20 @@ start.post = (args: { quiz: number | { id: number } } | [quiz: number | { id: nu
         startForm.post = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
             action: start.url(args, options),
             method: 'post',
+        })
+            /**
+* @see \App\Http\Controllers\Student\QuizController::start
+ * @see app/Http/Controllers/Student/QuizController.php:125
+ * @route '/app/quiz/{quiz}/start'
+ */
+        startForm.head = (args: { quiz: number | { id: number } } | [quiz: number | { id: number } ] | number | { id: number }, options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: start.url(args, {
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
         })
     
     start.form = startForm

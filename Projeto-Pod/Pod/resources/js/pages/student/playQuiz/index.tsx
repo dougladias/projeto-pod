@@ -6,6 +6,7 @@ import { Clock, BookOpen, Trophy, ArrowLeft } from 'lucide-react';
 // Importar imagens
 import playQuizBackground from '@/assets/playQuiz.webp';
 import logoPlayQuiz from '@/assets/LogoPlayQuiz.webp';
+import campeaoImage from '@/assets/campeao.png';
 import nivel1Image from '@/assets/nivel_1.webp';
 import nivel2Image from '@/assets/nivel_2.webp';
 import nivel3Image from '@/assets/nivel_3.webp';
@@ -35,7 +36,7 @@ const nivelImages = [nivel1Image, nivel2Image, nivel3Image, nivel4Image, nivel5I
 
 // Posições dos níveis no mapa (ajuste conforme necessário)
 const nivelPositions = [
-    { top: '25%', left: '58%' },  // Nível 1
+    { top: '25%', left: '59%' },  // Nível 1
     { top: '27%', left: '34%' },  // Nível 2
     { top: '50%', left: '56%' },  // Nível 3
     { top: '65%', left: '30%' },  // Nível 4
@@ -80,6 +81,15 @@ export default function QuizzesIndex({ quizzes }: Props) {
                     src={logoPlayQuiz}
                     alt="Logo PlayQuiz"
                     className="w-[400px] h-auto lg:w-[600px] xl:w-[800px] drop-shadow-2xl"
+                />
+            </div>
+
+            {/* Campeão no lado esquerdo */}
+            <div className="absolute left-24 bottom-64 z-20 hidden lg:block">
+                <img
+                    src={campeaoImage}
+                    alt="Campeão"
+                    className="w-72 h-auto xl:w-96 drop-shadow-2xl scale-[1.5]"
                 />
             </div>
 

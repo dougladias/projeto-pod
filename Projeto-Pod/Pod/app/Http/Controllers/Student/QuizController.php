@@ -274,7 +274,14 @@ class QuizController extends Controller
             'completed_at' => now(),
         ]);
 
-        // Redireciona para Meus Quizzes com mensagem de sucesso
-        return redirect()->route('student.myQuiz.index')->with('success', 'Quiz finalizado com sucesso!');
+        // Retorna sucesso sem redirecionar
+        return response()->json([
+            'success' => true,
+            'message' => 'Quiz finalizado com sucesso!',
+            'score' => $score,
+            'accuracy' => $accuracy,
+            'correct_answers' => $correctAnswers,
+            'total_questions' => $totalQuestions,
+        ]);
     }
 }
