@@ -7,6 +7,7 @@ export const forgotPasswordSchema = z.object({
     email: z
         .string()
         .min(1, 'E-mail é obrigatório')
+        .max(100, 'E-mail muito longo (máximo 100 caracteres)')
         .email({ message: 'E-mail inválido' }),
 });
 
