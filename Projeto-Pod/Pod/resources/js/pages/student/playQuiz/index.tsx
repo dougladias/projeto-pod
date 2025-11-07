@@ -6,7 +6,7 @@ import { Clock, BookOpen, Trophy, ArrowLeft } from 'lucide-react';
 // Importar imagens
 import playQuizBackground from '@/assets/playQuiz.webp';
 import logoPlayQuiz from '@/assets/LogoPlayQuiz.webp';
-import campeaoImage from '@/assets/campeao.png';
+import campeaoImage from '@/assets/campeao.webp';
 import nivel1Image from '@/assets/nivel_1.webp';
 import nivel2Image from '@/assets/nivel_2.webp';
 import nivel3Image from '@/assets/nivel_3.webp';
