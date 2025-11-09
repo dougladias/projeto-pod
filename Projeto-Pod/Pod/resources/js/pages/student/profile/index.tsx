@@ -2,29 +2,9 @@ import { Head } from '@inertiajs/react';
 import StudentLayout from '@/layouts/student/student-layout';
 import ProfileCard from './_components/ProfileCard';
 import ProfileForm from './_components/ProfileForm';
+import type { ProfilePageProps } from '@/types/profile';
 
-interface User {
-    name: string;
-    email: string;
-    birth_date?: string;
-    phone?: string;
-    city?: string;
-    vape_usage?: string;
-    bio?: string;
-    avatar?: string;
-    total_points: number;
-    total_completed_quizzes: number;
-    average_accuracy: number;
-    ranking_position: number;
-    total_achievements: number;
-}
-
-interface Props {
-    user: User;
-    status?: string;
-}
-
-export default function ProfileEdit({ user, status }: Props) {
+export default function ProfileEdit({ user, status }: ProfilePageProps) {
     return (
         <StudentLayout>
             <Head title="Meu Perfil" />

@@ -22,10 +22,10 @@ export function RankingSection({ topRanking }: Props) {
             {/* Lista dos top 3 usuários */}
             <div className="space-y-3">
                 {topRanking.map((user) => {
-                    const crownColors = [
-                        '#F4D03F', // 1º lugar - Dourado
-                        '#C0C0C0', // 2º lugar - Prata
-                        '#CD7F32', // 3º lugar - Bronze
+                    const medalEmojis = [
+                        '🥇', // 1º lugar - Ouro
+                        '🥈', // 2º lugar - Prata
+                        '🥉', // 3º lugar - Bronze
                     ];
 
                     {/* Item do usuário no ranking */}
@@ -36,7 +36,7 @@ export function RankingSection({ topRanking }: Props) {
                             style={{ backgroundColor: '#D5DFFF' }}
                         >
                             <div className="flex items-center justify-center text-4xl flex-shrink-0 w-12">
-                                <span style={{ color: crownColors[user.position - 1] }}>👑</span>
+                                <span>{medalEmojis[user.position - 1]}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="font-semibold text-sm text-gray-900 truncate">

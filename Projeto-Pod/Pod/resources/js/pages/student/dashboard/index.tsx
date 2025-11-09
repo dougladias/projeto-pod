@@ -4,6 +4,7 @@ import { RecentQuizzes } from './_components/recent-quizzes';
 import { RankingSection } from './_components/ranking-section';
 import { QuickActions } from './_components/quick-actions';
 import type { DashboardProps } from '@/types/dashboard';
+import { Head } from '@inertiajs/react';
 
 // Student Dashboard Page Component
 export default function StudentDashboard({
@@ -13,6 +14,7 @@ export default function StudentDashboard({
 }: DashboardProps) {
     return (
         <StudentLayout>
+            <Head title="Dashboard" />
             <div className="space-y-6">
                 {/* Header */}
                 <div className="flex items-center gap-3">

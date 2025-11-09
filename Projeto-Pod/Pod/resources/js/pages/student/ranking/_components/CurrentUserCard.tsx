@@ -2,23 +2,14 @@ import NikoAvatar from '@/assets/Niko.webp';
 import TinaAvatar from '@/assets/Tina.webp';
 import AvatarM from '@/assets/avatarM.webp';
 import { User, Crown } from 'lucide-react';
-
-interface CurrentUserCardProps {
-    name: string;
-    avatar?: string | null;
-    totalCompletedQuizzes: number;
-    totalPoints: number;
-    averageAccuracy: number;
-    rankingPosition: number;
-}
+import type { CurrentUserCardProps } from '@/types/ranking';
 
 export default function CurrentUserCard({
     name,
     avatar,
     totalCompletedQuizzes,
     totalPoints,
-    averageAccuracy,
-    rankingPosition,
+    averageAccuracy,    
 }: CurrentUserCardProps) {
     // Calculate level based on completed quizzes
     const level = Math.floor(totalCompletedQuizzes / 5);

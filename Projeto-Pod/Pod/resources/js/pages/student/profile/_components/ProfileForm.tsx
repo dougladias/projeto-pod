@@ -13,21 +13,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from 'sonner';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
-
-interface User {
-    name: string;
-    email: string;
-    birth_date?: string;
-    phone?: string;
-    city?: string;
-    vape_usage?: string;
-    bio?: string;
-}
-
-interface ProfileFormProps {
-    user: User;
-    status?: string;
-}
+import type { ProfileFormProps } from '@/types/profile';
 
 export default function ProfileForm({ user }: ProfileFormProps) {
     const [processing, setProcessing] = useState(false);
@@ -111,7 +97,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                     )}
                 </div>
 
-                {/* Idade and Telefone - Grid 2 columns */}
+                {/* Idade */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <Label htmlFor="age">Idade</Label>
@@ -128,6 +114,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                         </p>
                     </div>
 
+                    {/* Telefone */}
                     <div>
                         <Label htmlFor="phone">Telefone</Label>
                         <Input
@@ -162,7 +149,8 @@ export default function ProfileForm({ user }: ProfileFormProps) {
                             O e-mail não pode ser alterado
                         </p>
                     </div>
-
+                    
+                    {/* Cidade */}
                     <div>
                         <Label htmlFor="city">Cidade</Label>
                         <Input

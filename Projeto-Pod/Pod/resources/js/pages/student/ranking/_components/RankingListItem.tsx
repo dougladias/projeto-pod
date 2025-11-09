@@ -2,18 +2,7 @@ import NikoAvatar from '@/assets/Niko.webp';
 import TinaAvatar from '@/assets/Tina.webp';
 import AvatarM from '@/assets/avatarM.webp';
 import { User, Crown } from 'lucide-react';
-
-interface RankingListItemProps {
-    position: number;
-    name: string;
-    avatar?: string | null;
-    level: number;
-    totalQuizzes: number;
-    points: number;
-    accuracy: number;
-    sequencia: number;
-    badge?: string;
-}
+import type { RankingListItemProps } from '@/types/ranking';
 
 export default function RankingListItem({
     position,
@@ -22,8 +11,7 @@ export default function RankingListItem({
     level,
     totalQuizzes,
     points,
-    accuracy,
-    sequencia,
+    accuracy,    
     badge,
 }: RankingListItemProps) {
     // Map avatar name to imported asset
@@ -49,21 +37,18 @@ export default function RankingListItem({
     const getBadgeConfig = () => {
         if (position === 1) {
             return {
-                icon: <Crown className="w-3 h-3" />,
                 text: '1º Lugar',
                 className: 'bg-blue-600 text-white',
             };
         }
         if (position === 2) {
             return {
-                icon: <Crown className="w-3 h-3" />,
                 text: '2º Lugar',
                 className: 'bg-gray-400 text-white',
             };
         }
         if (position === 3) {
             return {
-                icon: <Crown className="w-3 h-3" />,
                 text: '3º Lugar',
                 className: 'bg-orange-400 text-white',
             };
@@ -135,9 +120,8 @@ export default function RankingListItem({
                 {/* Badge */}
                 {badgeConfig && (
                     <div className="flex-shrink-0">
-                        <div className={`flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold ${badgeConfig.className}`}>
-                            {badgeConfig.icon}
-                            <span>{badgeConfig.text}</span>
+                        <div className={`px-4 py-2 rounded-lg text-xs font-semibold ${badgeConfig.className}`}>
+                            {badgeConfig.text}
                         </div>
                     </div>
                 )}

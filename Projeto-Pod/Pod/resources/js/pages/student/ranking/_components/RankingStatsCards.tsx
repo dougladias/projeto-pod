@@ -1,11 +1,5 @@
 import { GraduationCap, TrendingUp, Target, Award } from 'lucide-react';
-
-interface RankingStatsCardsProps {
-    totalStudents: number;
-    positionChange?: number;
-    averageAccuracy: number;
-    topPercentage: number;
-}
+import type { RankingStatsCardsProps } from '@/types/ranking';
 
 export default function RankingStatsCards({
     totalStudents,
